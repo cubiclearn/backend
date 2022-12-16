@@ -9,6 +9,7 @@ contract SbtTest is Test {
     Receiver public receiver;
 
     address owner = address(0x69);
+    address notOwner = address(0x42);
 
     function setUp() public {
         vm.startPrank(owner);
@@ -17,28 +18,61 @@ contract SbtTest is Test {
         vm.stopPrank();
     }
 
-    function testMint() public {
+    function testOwnerCanMintToOthers() public {
         vm.prank(owner);
         sbt.mint(address(receiver));
         assertEq(sbt.totalSupply(), 1);
+        assertEq(sbt.ownerOf(0), address(receiver));
     }
 
-    function testOwnerTransfer() public {
+    function testOwnerCanMintToSelf() public {
+        vm.prank(owner);
+        sbt.mint(owner);
+        assertEq(sbt.totalSupply(), 1);
+        assertEq(sbt.ownerOf(0), owner);
+    }
+    
+    function testNotOwnerCannotMint() public {
+        vm.startPrank(notOwner);
+        vm.expectRevert("Ownable: caller is not the owner");
+        sbt.mint(address(receiver));
+        vm.stopPrank();
+    }
+
+    function testOwnerCannotTransfer() public {
         vm.startPrank(owner);
         sbt.mint(owner);
+        vm.expectRevert("token is locked");
         sbt.transferFrom(owner, address(receiver), 0);
         vm.stopPrank();
-        assertEq(sbt.totalSupply(), 1);
+    }
+
+    function testReceiverCannotTransfer() public {
+        vm.prank(owner);
+        sbt.mint(address(receiver));
+        vm.startPrank(address(receiver));
+        vm.expectRevert("token is locked");
+        sbt.transferFrom(address(receiver), owner, 0);
+        vm.stopPrank();
+    }
+
+    function testCannotExceedMaxSupply() public {
+        vm.startPrank(owner);
+        for (uint256 i = 0; i < 100; i++) {
+            sbt.mint(owner);
+        }
+        vm.expectRevert("Mint would exceed max supply");
+        sbt.mint(owner);
+        vm.stopPrank();
+    }
+
+    function testSupportsEIP5192Interface() public {
+        assertEq(sbt.supportsInterface(0xb45a3c0e), true);
     }
 }
 
 contract Receiver {
-    function onERC721Received(
-        address,
-        address,
-        uint256,
-        bytes calldata
-    ) external pure returns (bytes4) {
+    function onERC721Received(address, address, uint256, bytes calldata) external pure returns (bytes4) {
         return 0x150b7a02;
     }
 
@@ -46,4 +80,3 @@ contract Receiver {
         // solhint-disable-previous-line no-empty-blocks
     }
 }
-

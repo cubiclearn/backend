@@ -6,15 +6,12 @@ import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/security/Pausable.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
+import "./IERC5192.sol";
 
 /**
  * @title Soulbound NFT
- * @author Breakthrough-Labs Inc.
+ * @author Luca Donno (@donnoh_eth)
  * @notice NFT, Soulbound, ERC721
- * @custom:version 1.0.10
- * @custom:address 1285485
- * @custom:default-precision 0
- * @custom:simple-description Soulbound NFT with owner minting.
  * @dev ERC721 Soulbound NFT with the following features:
  *
  *  - Deployer can mint to recipients.
@@ -22,9 +19,10 @@ import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
  *
  */
 
-contract SoulboundNFT is ERC721, ERC721Enumerable, Pausable, Ownable {
+contract SoulboundNFT is ERC721, ERC721Enumerable, Ownable, IERC5192 {
     string private _baseURIextended;
     uint256 public immutable MAX_SUPPLY;
+    mapping(uint256 => bool) private _locked;
 
     /**
      * @param _name NFT Name
@@ -32,31 +30,26 @@ contract SoulboundNFT is ERC721, ERC721Enumerable, Pausable, Ownable {
      * @param _uri Token URI used for metadata
      * @param maxSupply Maximum # of NFTs
      */
-    constructor(
-        string memory _name,
-        string memory _symbol,
-        string memory _uri,
-        uint256 maxSupply
-    ) payable ERC721(_name, _symbol) {
+    constructor(string memory _name, string memory _symbol, string memory _uri, uint256 maxSupply)
+        payable
+        ERC721(_name, _symbol)
+    {
         _baseURIextended = _uri;
         MAX_SUPPLY = maxSupply;
-        pause();
     }
 
-    /**
-     * @dev Pauses the NFT, preventing any transfers. Called by default on a SBT.
-     */
-    function pause() internal {
-        _pause();
+    function locked(uint256 tokenId) external view override returns (bool) {
+        return _locked[tokenId];
     }
 
     /**
      * @dev An external method for the owner to mint Soulbound NFTs. Requires that the minted NFTs will not exceed the `MAX_SUPPLY`.
      */
-    function mint(address to) external onlyOwner{
+    function mint(address to) external onlyOwner {
         uint256 ts = totalSupply();
         require(ts + 1 <= MAX_SUPPLY, "Mint would exceed max supply");
         _safeMint(to, ts);
+        _locked[ts] = true;
     }
 
     /**
@@ -73,22 +66,16 @@ contract SoulboundNFT is ERC721, ERC721Enumerable, Pausable, Ownable {
         return _baseURIextended;
     }
 
-    function _beforeTokenTransfer(
-        address from,
-        address to,
-        uint256 tokenId,
-        uint256 batchSize
-    ) internal override(ERC721, ERC721Enumerable) {
-        require(_msgSender() == owner() && paused(), "not owner cannot mint");
+    function _beforeTokenTransfer(address from, address to, uint256 tokenId, uint256 batchSize)
+        internal
+        override (ERC721, ERC721Enumerable)
+    {
+        require(!_locked[tokenId], "token is locked");
+        require(_msgSender() == owner(), "not owner cannot mint");
         super._beforeTokenTransfer(from, to, tokenId, batchSize);
     }
 
-    function supportsInterface(bytes4 interfaceId)
-        public
-        view
-        override(ERC721, ERC721Enumerable)
-        returns (bool)
-    {
-        return super.supportsInterface(interfaceId);
+    function supportsInterface(bytes4 interfaceId) public view override (ERC721, ERC721Enumerable) returns (bool) {
+        return type(IERC5192).interfaceId == interfaceId || super.supportsInterface(interfaceId);
     }
 }
