@@ -71,7 +71,6 @@ contract SoulboundNFT is ERC721, ERC721Enumerable, Ownable, IERC5192 {
         override (ERC721, ERC721Enumerable)
     {
         require(!_locked[tokenId], "token is locked");
-        require(_msgSender() == owner(), "not owner cannot mint");
         super._beforeTokenTransfer(from, to, tokenId, batchSize);
     }
 

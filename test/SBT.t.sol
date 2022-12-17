@@ -69,6 +69,21 @@ contract SbtTest is Test {
     function testSupportsEIP5192Interface() public {
         assertEq(sbt.supportsInterface(0xb45a3c0e), true);
     }
+
+    function testLocked() public {
+        vm.prank(owner);
+        sbt.mint(owner);
+        assertEq(sbt.locked(0), true);
+    }
+
+    function testSetBaseURI() public {
+        vm.startPrank(owner);
+        SoulboundNftHarness sbtHarness = new SoulboundNftHarness("Soulbound NFT", "SBT", "https://sbt.com/", 100);
+        assertEq(sbtHarness.exposed_baseURI(), "https://sbt.com/");
+        sbtHarness.setBaseURI("https://sbt2.com/");
+        assertEq(sbtHarness.exposed_baseURI(), "https://sbt2.com/");
+        vm.stopPrank();
+    }
 }
 
 contract Receiver {
@@ -78,5 +93,17 @@ contract Receiver {
 
     constructor() {
         // solhint-disable-previous-line no-empty-blocks
+    }
+}
+
+contract SoulboundNftHarness is SoulboundNFT {
+
+    constructor(string memory _name, string memory _symbol, string memory _uri, uint256 maxSupply)
+        payable
+        SoulboundNFT(_name, _symbol, _uri, maxSupply)
+    {}
+
+    function exposed_baseURI() public view returns (string memory) {
+        return _baseURI();
     }
 }
