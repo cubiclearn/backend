@@ -50,6 +50,7 @@ contract SoulboundNFT is ERC721, ERC721Enumerable, Ownable, IERC5192 {
         require(ts + 1 <= MAX_SUPPLY, "Mint would exceed max supply");
         _safeMint(to, ts);
         _locked[ts] = true;
+        emit Locked(ts);
     }
 
     /**

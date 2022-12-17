@@ -76,6 +76,15 @@ contract SbtTest is Test {
         assertEq(sbt.locked(0), true);
     }
 
+    event Locked(uint256 tokenId);
+
+    function testLockedEventIsEmitted() public {
+        vm.prank(owner);
+        vm.expectEmit(false, false, false, true);
+        emit Locked(0);
+        sbt.mint(owner);
+    }
+
     function testSetBaseURI() public {
         vm.startPrank(owner);
         SoulboundNftHarness sbtHarness = new SoulboundNftHarness("Soulbound NFT", "SBT", "https://sbt.com/", 100);
