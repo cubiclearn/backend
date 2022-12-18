@@ -1,5 +1,7 @@
 # backend
 
+![example workflow](https://github.com/cubiclearn/backend/actions/workflows/test.yml/badge.svg)
+
 contracts &amp; tests
 
 [SBTs research and considerations](https://hackmd.io/@donnoh-eth/SBTs).
