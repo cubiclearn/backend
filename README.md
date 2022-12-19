@@ -8,6 +8,8 @@ contracts &amp; tests
 
 ## usage
 
+- `pip install pre-commit`
+- `pre-commit install` to install the fmt and gas snapshot pre-commit hook
 - install [foundry](https://github.com/foundry-rs/foundry)
 - clone repo
 - cd into repo
