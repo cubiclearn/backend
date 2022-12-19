@@ -31,7 +31,7 @@ contract SbtTest is Test {
         assertEq(sbt.totalSupply(), 1);
         assertEq(sbt.ownerOf(0), owner);
     }
-    
+
     function testNotOwnerCannotMint() public {
         vm.startPrank(notOwner);
         vm.expectRevert("Ownable: caller is not the owner");
@@ -106,7 +106,6 @@ contract Receiver {
 }
 
 contract SoulboundNftHarness is SoulboundNFT {
-
     constructor(string memory _name, string memory _symbol, string memory _uri, uint256 maxSupply)
         payable
         SoulboundNFT(_name, _symbol, _uri, maxSupply)
