@@ -76,6 +76,11 @@ contract SbtTest is Test {
         assertEq(sbt.locked(0), true);
     }
 
+    function testLockedForNonExistentToken() public {
+        vm.expectRevert("Token does not exist");
+        sbt.locked(0);
+    }
+
     event Locked(uint256 tokenId);
 
     function testLockedEventIsEmitted() public {

@@ -16,13 +16,13 @@ import "./IERC5192.sol";
  *
  *  - Deployer can mint to recipients.
  *  - No transfer capability.
+ *  - No unlock capability.
  *
  */
 
 contract SoulboundNFT is ERC721, ERC721Enumerable, Ownable, IERC5192 {
     string private _baseURIextended;
     uint256 public immutable MAX_SUPPLY;
-    mapping(uint256 => bool) private _locked;
 
     /**
      * @param _name NFT Name
@@ -39,7 +39,8 @@ contract SoulboundNFT is ERC721, ERC721Enumerable, Ownable, IERC5192 {
     }
 
     function locked(uint256 tokenId) external view override returns (bool) {
-        return _locked[tokenId];
+        require(_exists(tokenId), "Token does not exist");
+        return true;
     }
 
     /**
@@ -49,7 +50,6 @@ contract SoulboundNFT is ERC721, ERC721Enumerable, Ownable, IERC5192 {
         uint256 ts = totalSupply();
         require(ts + 1 <= MAX_SUPPLY, "Mint would exceed max supply");
         _safeMint(to, ts);
-        _locked[ts] = true;
         emit Locked(ts);
     }
 
@@ -71,7 +71,7 @@ contract SoulboundNFT is ERC721, ERC721Enumerable, Ownable, IERC5192 {
         internal
         override (ERC721, ERC721Enumerable)
     {
-        require(!_locked[tokenId], "token is locked");
+        require(from == address(0), "token is locked");
         super._beforeTokenTransfer(from, to, tokenId, batchSize);
     }
 
