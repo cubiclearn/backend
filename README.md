@@ -6,14 +6,27 @@ contracts &amp; tests
 
 [SBTs research and considerations](https://hackmd.io/@donnoh-eth/SBTs).
 
-## usage
+## project structure
 
-- `pip install pre-commit`
-- `pre-commit install` to install the fmt and gas snapshot pre-commit hook
-- install [foundry](https://github.com/foundry-rs/foundry)
+```ml
+src
+├── IERC5192 — "Minimal Soulbound Token Interface"
+└── SBT — "Implementation of IERC5192 extending ERC721"
+test
+└── SBT — "SBT tests"
+```
+
+## installation
+
+- install [foundry](https://github.com/foundry-rs/foundry), which installs `forge`, `cast` and `anvil`
 - clone repo
 - cd into repo
 - run `forge install`
+- `pip install pre-commit`
+- `pre-commit install` to install the fmt and gas snapshot pre-commit hook
+
+## usage
+
 - to build, run `forge build`
 - to run tests, run `forge test`
 - to check coverage, run `forge coverage`
