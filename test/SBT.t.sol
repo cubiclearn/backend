@@ -39,6 +39,17 @@ contract SbtTest is Test {
         vm.stopPrank();
     }
 
+    function testOwnerCanMultiMint() public {
+        vm.prank(owner);
+        address[] memory to = new address[](2);
+        to[0] = owner;
+        to[1] = address(receiver);
+        sbt.multiMint(to);
+        assertEq(sbt.totalSupply(), 2);
+        assertEq(sbt.ownerOf(0), owner);
+        assertEq(sbt.ownerOf(1), address(receiver));
+    }
+
     function testOwnerCannotTransfer() public {
         vm.startPrank(owner);
         sbt.mint(owner);
@@ -63,6 +74,20 @@ contract SbtTest is Test {
         }
         vm.expectRevert("Mint would exceed max supply");
         sbt.mint(owner);
+        vm.stopPrank();
+    }
+
+    function testMultiMintCannotExceedMaxSupply() public {
+        vm.startPrank(owner);
+        address[] memory to = new address[](100);
+        for (uint256 i = 0; i < 100; i++) {
+            to[i] = owner;
+        }
+        sbt.multiMint(to);
+        address[] memory to2 = new address[](1);
+        to2[0] = owner;
+        vm.expectRevert("Mint would exceed max supply");
+        sbt.multiMint(to2);
         vm.stopPrank();
     }
 

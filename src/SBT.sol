@@ -17,6 +17,7 @@ import "./IERC5192.sol";
  *  - Deployer can mint to recipients.
  *  - No transfer capability.
  *  - No unlock capability.
+ *  - No burn capability.
  *
  */
 
@@ -51,6 +52,15 @@ contract SoulboundNFT is ERC721, ERC721Enumerable, Ownable, IERC5192 {
         require(ts + 1 <= MAX_SUPPLY, "Mint would exceed max supply");
         _safeMint(to, ts);
         emit Locked(ts);
+    }
+
+    function multiMint(address[] memory to) external onlyOwner {
+        uint256 ts = totalSupply();
+        require(ts + to.length <= MAX_SUPPLY, "Mint would exceed max supply");
+        for (uint256 i = 0; i < to.length; i++) {
+            _safeMint(to[i], ts + i);
+            emit Locked(ts + i);
+        }
     }
 
     /**
