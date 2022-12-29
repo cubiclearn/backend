@@ -6,6 +6,7 @@ import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/security/Pausable.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "./IERC5192.sol";
 
 /**
@@ -18,10 +19,11 @@ import "./IERC5192.sol";
  *  - No transfer capability.
  *  - No unlock capability.
  *  - No burn capability.
+ *  - Multiple simultaneous mints.
  *
  */
 
-contract SoulboundNFT is ERC721, ERC721Enumerable, Ownable, IERC5192 {
+contract SoulboundNFT is ERC721, ERC721Enumerable, ERC721URIStorage, Ownable, IERC5192 {
     string private _baseURIextended;
     uint256 public immutable MAX_SUPPLY;
 
@@ -47,18 +49,20 @@ contract SoulboundNFT is ERC721, ERC721Enumerable, Ownable, IERC5192 {
     /**
      * @dev An external method for the owner to mint Soulbound NFTs. Requires that the minted NFTs will not exceed the `MAX_SUPPLY`.
      */
-    function mint(address to) external onlyOwner {
+    function mint(address to, string memory uri) external onlyOwner {
         uint256 ts = totalSupply();
         require(ts + 1 <= MAX_SUPPLY, "Mint would exceed max supply");
         _safeMint(to, ts);
+        _setTokenURI(ts, uri);
         emit Locked(ts);
     }
 
-    function multiMint(address[] memory to) external onlyOwner {
+    function multiMint(address[] memory to, string[] memory uri) external onlyOwner {
         uint256 ts = totalSupply();
         require(ts + to.length <= MAX_SUPPLY, "Mint would exceed max supply");
         for (uint256 i = 0; i < to.length; i++) {
             _safeMint(to[i], ts + i);
+            _setTokenURI(ts + i, uri[i]);
             emit Locked(ts + i);
         }
     }
@@ -87,5 +91,13 @@ contract SoulboundNFT is ERC721, ERC721Enumerable, Ownable, IERC5192 {
 
     function supportsInterface(bytes4 interfaceId) public view override (ERC721, ERC721Enumerable) returns (bool) {
         return type(IERC5192).interfaceId == interfaceId || super.supportsInterface(interfaceId);
+    }
+
+    function _burn(uint256 tokenId) internal override (ERC721, ERC721URIStorage) {
+        super._burn(tokenId);
+    }
+
+    function tokenURI(uint256 tokenId) public view override (ERC721, ERC721URIStorage) returns (string memory) {
+        return super.tokenURI(tokenId);
     }
 }
