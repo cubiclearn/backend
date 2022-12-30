@@ -57,6 +57,18 @@ contract SbtTest is Test {
         assertEq(sbt.tokenURI(1), "https://sbt.com/2.json");
     }
 
+    function testMultiMintWithDifferentLengths() public {
+        vm.startPrank(owner);
+        address[] memory to = new address[](2);
+        to[0] = owner;
+        to[1] = address(receiver);
+        string[] memory uri = new string[](1);
+        uri[0] = "1.json";
+        vm.expectRevert("to and uri arrays must be the same length");
+        sbt.multiMint(to, uri);
+        vm.stopPrank();
+    }
+
     function testOwnerCannotTransfer() public {
         vm.startPrank(owner);
         sbt.mint(owner, "1.json");

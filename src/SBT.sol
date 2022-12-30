@@ -60,6 +60,7 @@ contract SoulboundNFT is ERC721, ERC721Enumerable, ERC721URIStorage, Ownable, IE
     function multiMint(address[] memory to, string[] memory uri) external onlyOwner {
         uint256 ts = totalSupply();
         require(ts + to.length <= MAX_SUPPLY, "Mint would exceed max supply");
+        require(to.length == uri.length, "to and uri arrays must be the same length");
         for (uint256 i = 0; i < to.length; i++) {
             _safeMint(to[i], ts + i);
             _setTokenURI(ts + i, uri[i]);
