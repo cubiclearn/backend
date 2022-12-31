@@ -30,6 +30,7 @@ test
 - to build, run `forge build`
 - to run tests, run `forge test`
 - to check coverage, run `forge coverage`
+- to get a list of all the available methods of a contract, run `forge inspect src/SBT.sol:SoulboundNFT methods` or similar
 
 more info about foundry: [foundry book](https://book.getfoundry.sh/)
 
