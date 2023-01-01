@@ -57,7 +57,7 @@ contract SoulboundNFT is ERC721, ERC721Enumerable, ERC721URIStorage, Ownable, IE
         emit Locked(ts);
     }
 
-    function multiMint(address[] memory to, string[] memory uri) external onlyOwner {
+    function multiMint(address[] memory to, string[] memory uri) external virtual onlyOwner {
         uint256 ts = totalSupply();
         require(ts + to.length <= MAX_SUPPLY, "Mint would exceed max supply");
         require(to.length == uri.length, "to and uri arrays must be the same length");
@@ -90,7 +90,13 @@ contract SoulboundNFT is ERC721, ERC721Enumerable, ERC721URIStorage, Ownable, IE
         super._beforeTokenTransfer(from, to, tokenId, batchSize);
     }
 
-    function supportsInterface(bytes4 interfaceId) public view override (ERC721, ERC721Enumerable) returns (bool) {
+    function supportsInterface(bytes4 interfaceId)
+        public
+        view
+        virtual
+        override (ERC721, ERC721Enumerable)
+        returns (bool)
+    {
         return type(IERC5192).interfaceId == interfaceId || super.supportsInterface(interfaceId);
     }
 
