@@ -23,22 +23,16 @@ import "./IERC5192.sol";
  *
  */
 
-contract SoulboundNFT is ERC721, ERC721Enumerable, ERC721URIStorage, Ownable, IERC5192 {
+contract SoulboundNFT is ERC721, ERC721Enumerable, ERC721URIStorage, IERC5192 {
     string private _baseURIextended;
-    uint256 public immutable MAX_SUPPLY;
 
     /**
      * @param _name NFT Name
      * @param _symbol NFT Symbol
-     * @param _uri Token URI used for metadata
-     * @param maxSupply Maximum # of NFTs
+     * @param _bUri Token URI used for metadata
      */
-    constructor(string memory _name, string memory _symbol, string memory _uri, uint256 maxSupply)
-        payable
-        ERC721(_name, _symbol)
-    {
-        _baseURIextended = _uri;
-        MAX_SUPPLY = maxSupply;
+    constructor(string memory _name, string memory _symbol, string memory _bUri) payable ERC721(_name, _symbol) {
+        _baseURIextended = _bUri;
     }
 
     function locked(uint256 tokenId) external view override returns (bool) {
@@ -47,32 +41,10 @@ contract SoulboundNFT is ERC721, ERC721Enumerable, ERC721URIStorage, Ownable, IE
     }
 
     /**
-     * @dev An external method for the owner to mint Soulbound NFTs. Requires that the minted NFTs will not exceed the `MAX_SUPPLY`.
-     */
-    function mint(address to, string memory uri) external onlyOwner {
-        uint256 ts = totalSupply();
-        require(ts + 1 <= MAX_SUPPLY, "Mint would exceed max supply");
-        _safeMint(to, ts);
-        _setTokenURI(ts, uri);
-        emit Locked(ts);
-    }
-
-    function multiMint(address[] memory to, string[] memory uri) external virtual onlyOwner {
-        uint256 ts = totalSupply();
-        require(ts + to.length <= MAX_SUPPLY, "Mint would exceed max supply");
-        require(to.length == uri.length, "to and uri arrays must be the same length");
-        for (uint256 i = 0; i < to.length; i++) {
-            _safeMint(to[i], ts + i);
-            _setTokenURI(ts + i, uri[i]);
-            emit Locked(ts + i);
-        }
-    }
-
-    /**
      * @dev Updates the baseURI that will be used to retrieve NFT metadata.
      * @param baseURI_ The baseURI to be used.
      */
-    function setBaseURI(string memory baseURI_) external onlyOwner {
+    function _setBaseURI(string memory baseURI_) internal virtual {
         _baseURIextended = baseURI_;
     }
 
