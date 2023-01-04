@@ -11,7 +11,7 @@ contracts &amp; tests
 ```ml
 src
 ├── IERC5192 — "Minimal Soulbound Token Interface"
-├── IERC5484 — "Consensual Soulbound Tokens"
+├── IERC5484 — "Consensual Soulbound Tokens Interface"
 ├── SBT — "Implementation of IERC5192 extending ERC721"
 ├── SBTBurnable — "Implementation of IERC5484 extending SBT"
 ├── Credentials — "Mintable and Ownable SBT"
