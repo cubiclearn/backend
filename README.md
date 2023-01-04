@@ -23,27 +23,27 @@ test
 └── CredentialsBurnable — "CredentialsBurnable tests"
 ```
 
-## installation
+## Installation
 
-- install [foundry](https://github.com/foundry-rs/foundry), which installs `forge`, `cast` and `anvil`.
-- clone repo.
-- cd into repo.
-- run `forge install`.
+- Install [foundry](https://github.com/foundry-rs/foundry).
+- Clone repo.
+- `cd` into repo.
+- Run `forge install`.
 - `pip install pre-commit`.
 - `pre-commit install` to install the fmt and gas snapshot pre-commit hook.
 
-## usage
+## Usage
 
-- to build, run `forge build`.
-- to run tests, run `forge test`.
-- to check coverage, run `forge coverage`.
-- to get a list of all the available methods of a contract, run `forge inspect src/Credentials.sol:Credentials methods` or similar.
+- To build, run `forge build`.
+- To run tests, run `forge test`.
+- To check coverage, run `forge coverage`.
+- To get a list of all the available methods of a contract, run `forge inspect src/Credentials.sol:Credentials methods` or similar.
 
 more info about foundry: [foundry book](https://book.getfoundry.sh/)
 
-## how to use in a local network
+## Local network deployment
 
-- run `anvil`, which creates a local EVM network and copy one of the private keys.
-- open another terminal and deploy the contract with `forge create --rpc-url http://127.0.0.1:8545 --constructor-args "Credentials" "CREDS" "https://creds.com/" "100" --private-key <PRIVATE_KEY> src/Credentials.sol:Credentials` or different constructor args.
-- save the "deployed to" address, which is the address of the contract in the local network.
-- check that everything's working with `cast call <CONTRACT_ADDRESS> "name()" --rpc-url http://127.0.0.1:8545 | cast --to-ascii` which should output the given name of the contract, in this case "Credentials".
+- Run `anvil`, which creates a local EVM network.
+- Copy one of the private keys and paste it in the `.env` file.
+- Run `source .env`.
+- Open another terminal and run `forge script script/Credentials.s.sol:LocalDeploy --fork-url $LOCAL_RPC_URL --broadcast`.
