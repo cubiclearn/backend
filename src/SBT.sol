@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.16;
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
@@ -31,7 +31,7 @@ contract SoulboundNFT is ERC721, ERC721Enumerable, ERC721URIStorage, IERC5192 {
      * @param _symbol NFT Symbol
      * @param _bUri Token URI used for metadata
      */
-    constructor(string memory _name, string memory _symbol, string memory _bUri) payable ERC721(_name, _symbol) {
+    constructor(string memory _name, string memory _symbol, string memory _bUri) ERC721(_name, _symbol) {
         _baseURIextended = _bUri;
     }
 

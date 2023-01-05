@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.9;
+pragma solidity ^0.8.16;
 
 import "./SBTBurnable.sol";
 
@@ -7,7 +7,6 @@ contract CredentialsBurnable is SoulboundNFTBurnable, Ownable {
     uint256 public immutable MAX_SUPPLY;
 
     constructor(string memory _name, string memory _symbol, string memory _bUri, uint256 maxSupply)
-        payable
         SoulboundNFTBurnable(_name, _symbol, _bUri)
     {
         MAX_SUPPLY = maxSupply;

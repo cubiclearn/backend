@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.16;
 
 import "./SBT.sol";
 import "./IERC5484.sol";
@@ -8,10 +8,7 @@ contract SoulboundNFTBurnable is SoulboundNFT, IERC5484 {
     mapping(uint256 => BurnAuth) private _burnAuth;
     mapping(uint256 => address) private _issuer;
 
-    constructor(string memory _name, string memory _symbol, string memory _uri)
-        payable
-        SoulboundNFT(_name, _symbol, _uri)
-    {}
+    constructor(string memory _name, string memory _symbol, string memory _uri) SoulboundNFT(_name, _symbol, _uri) {}
 
     function burnAuth(uint256 tokenId) external view override returns (BurnAuth) {
         require(_exists(tokenId), "Token does not exist");
