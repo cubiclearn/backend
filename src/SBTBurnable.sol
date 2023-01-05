@@ -15,6 +15,12 @@ contract SoulboundNFTBurnable is SoulboundNFT, IERC5484 {
         return _burnAuth[tokenId];
     }
 
+    function issuerOf(uint256 tokenId) external view returns (address) {
+        require(_exists(tokenId), "Token does not exist");
+        return _issuer[tokenId];
+    }
+
+    //TODO: refactor, this is a mess: use a require with ORs?
     function burn(uint256 tokenId) external {
         require(_exists(tokenId), "Token does not exist");
         address tokenOwner = ownerOf(tokenId);
