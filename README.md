@@ -47,5 +47,5 @@ more info about foundry: [foundry book](https://book.getfoundry.sh/)
 
 - Run `anvil`, which creates a local EVM network.
 - Copy one of the private keys and paste it in the `.env` file.
-- Run `source .env`.
-- Open another terminal and run `forge script script/Credentials.s.sol:LocalDeploy --fork-url $LOCAL_RPC_URL --broadcast`.
+- Open another terminal and run `source .env`.
+- Run `forge script script/Credentials.s.sol:LocalDeploy --fork-url $LOCAL_RPC_URL --broadcast`.
