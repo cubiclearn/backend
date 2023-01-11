@@ -19,7 +19,6 @@ import "./IERC5192.sol";
  *  - No transfer capability.
  *  - No unlock capability.
  *  - No burn capability.
- *  - Multiple simultaneous mints.
  *
  */
 
