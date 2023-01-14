@@ -8,6 +8,11 @@ contract SoulboundNFTBurnable is SoulboundNFT, IERC5484 {
     mapping(uint256 => BurnAuth) private _burnAuth;
     mapping(uint256 => address) private _issuer;
 
+    modifier onlyAllowed(address from, address to, uint256 tokenId) override {
+        require(from == address(0) || !(to == address(0) && _burnAuth[tokenId] == IERC5484.BurnAuth.Neither));
+        _;
+    }
+
     constructor(string memory _name, string memory _symbol, string memory _uri) SoulboundNFT(_name, _symbol, _uri) {}
 
     function burnAuth(uint256 tokenId) external view override returns (BurnAuth) {
@@ -20,25 +25,19 @@ contract SoulboundNFTBurnable is SoulboundNFT, IERC5484 {
         return _issuer[tokenId];
     }
 
-    //TODO: refactor, this is a mess: use a require with ORs?
     function burn(uint256 tokenId) external {
         require(_exists(tokenId), "Token does not exist");
         address tokenOwner = ownerOf(tokenId);
-        if (tokenOwner != msg.sender && msg.sender != _issuer[tokenId]) {
-            if (_burnAuth[tokenId] == BurnAuth.OwnerOnly) {
-                revert("Only the owner can burn this token");
-            } else if (_burnAuth[tokenId] == BurnAuth.IssuerOnly) {
-                revert("Only the issuer can burn this token");
-            } else if (_burnAuth[tokenId] == BurnAuth.Both) {
-                revert("Only the owner or issuer can burn this token");
-            } else {
-                revert("No one can burn this token");
-            }
-        }
+        require(
+            _burnAuth[tokenId] == BurnAuth.OwnerOnly && msg.sender == tokenOwner
+                || _burnAuth[tokenId] == BurnAuth.IssuerOnly && msg.sender == _issuer[tokenId]
+                || _burnAuth[tokenId] == BurnAuth.Both && (msg.sender == tokenOwner || msg.sender == _issuer[tokenId]),
+            "Caller is not authorized to burn this token"
+        );
         super._burn(tokenId);
     }
 
-    function supportsInterface(bytes4 interfaceId) public view virtual override (SoulboundNFT) returns (bool) {
+    function supportsInterface(bytes4 interfaceId) public view virtual override(SoulboundNFT) returns (bool) {
         return interfaceId == type(IERC5484).interfaceId || super.supportsInterface(interfaceId);
     }
 

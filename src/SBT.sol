@@ -19,12 +19,16 @@ import "./IERC5192.sol";
  *  - No transfer capability.
  *  - No unlock capability.
  *  - No burn capability.
- *  - Multiple simultaneous mints.
  *
  */
 
 contract SoulboundNFT is ERC721, ERC721Enumerable, ERC721URIStorage, IERC5192 {
     string private _baseURIextended;
+
+    modifier onlyAllowed(address from, address to, uint256 tokenId) virtual {
+        require(from == address(0), "token is locked");
+        _;
+    }
 
     /**
      * @param _name NFT Name
@@ -56,9 +60,10 @@ contract SoulboundNFT is ERC721, ERC721Enumerable, ERC721URIStorage, IERC5192 {
 
     function _beforeTokenTransfer(address from, address to, uint256 tokenId, uint256 batchSize)
         internal
-        override (ERC721, ERC721Enumerable)
+        virtual
+        override(ERC721, ERC721Enumerable)
+        onlyAllowed(from, to, tokenId)
     {
-        require(from == address(0), "token is locked");
         super._beforeTokenTransfer(from, to, tokenId, batchSize);
     }
 
@@ -66,17 +71,17 @@ contract SoulboundNFT is ERC721, ERC721Enumerable, ERC721URIStorage, IERC5192 {
         public
         view
         virtual
-        override (ERC721, ERC721Enumerable)
+        override(ERC721, ERC721Enumerable)
         returns (bool)
     {
         return type(IERC5192).interfaceId == interfaceId || super.supportsInterface(interfaceId);
     }
 
-    function _burn(uint256 tokenId) internal override (ERC721, ERC721URIStorage) {
+    function _burn(uint256 tokenId) internal override(ERC721, ERC721URIStorage) {
         super._burn(tokenId);
     }
 
-    function tokenURI(uint256 tokenId) public view override (ERC721, ERC721URIStorage) returns (string memory) {
+    function tokenURI(uint256 tokenId) public view override(ERC721, ERC721URIStorage) returns (string memory) {
         return super.tokenURI(tokenId);
     }
 }

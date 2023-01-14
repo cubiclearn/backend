@@ -50,6 +50,12 @@ contract SbtTest is Test {
         sbt.locked(0);
     }
 
+    function testMint() public {
+        vm.prank(owner);
+        sbtHarness.exposed_safeMint(address(receiver), 0);
+        assertEq(sbtHarness.ownerOf(0), address(receiver));
+    }
+
     function testTokenURI() public {
         vm.prank(owner);
         sbtHarness.exposed_safeMint(owner, 0);
@@ -67,7 +73,7 @@ contract SbtTest is Test {
 }
 
 contract Receiver {
-    function onERC721Received(address, address, uint256, bytes calldata) external pure returns (bytes4) {
+    function onERC721Received(address, address, uint256, bytes memory) public pure returns (bytes4) {
         return 0x150b7a02;
     }
 
@@ -81,10 +87,6 @@ contract SoulboundNftHarness is SoulboundNFT {
         payable
         SoulboundNFT(_name, _symbol, _uri)
     {}
-
-    function exposed_baseURI() public view returns (string memory) {
-        return _baseURI();
-    }
 
     function exposed_setTokenURI(uint256 tokenId, string memory uri) public {
         _setTokenURI(tokenId, uri);
