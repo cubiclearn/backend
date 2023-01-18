@@ -9,7 +9,7 @@ contract LocalDeploy is Script {
         uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
         vm.startBroadcast(deployerPrivateKey);
 
-        Credentials creds = new Credentials("Credentials", "CREDS", "https://creds.com/", 100);
+        new Credentials("Credentials", "CREDS", "https://creds.com/", 100);
 
         vm.stopBroadcast();
     }
