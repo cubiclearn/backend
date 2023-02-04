@@ -2,8 +2,8 @@
 pragma solidity ^0.8.9;
 
 import "forge-std/Test.sol";
-import "../src/SBTBurnable.sol";
-import "../src/IERC5484.sol";
+import "src/Credentials/SBTBurnable.sol";
+import "src/Credentials/IERC5484.sol";
 
 contract SbtBurnableTest is Test {
     SoulboundNFTBurnable public sbtb;

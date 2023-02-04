@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.9;
 
-import "src/Credentials.sol";
-import "src/CredentialsBurnable.sol";
+import "src/Credentials/Credentials.sol";
+import "src/Credentials/CredentialsBurnable.sol";
 
 contract CredentialsFactory {
     event CredentialsCreated(address indexed creator, address indexed credentials, bool burnable);
