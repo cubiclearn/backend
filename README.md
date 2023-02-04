@@ -38,8 +38,8 @@ test
 - To run tests, run `forge test`.
 - To check coverage, run `forge coverage`.
 - To run [slither](https://github.com/crytic/slither), install it and run `slither .`.
-- To run [mythril](https://github.com/ConsenSys/mythril), install it and run `myth analyze src/Credentials.sol --solc-json mythril.config.json` or similar.
-- To get a list of all the available methods of a contract, run `forge inspect src/Credentials.sol:Credentials methods` or similar.
+- To run [mythril](https://github.com/ConsenSys/mythril), install it and run `myth analyze src/Credentials/Credentials.sol --solc-json mythril.config.json` or similar.
+- To get a list of all the available methods of a contract, run `forge inspect src/Credentials/Credentials.sol:Credentials methods` or similar.
 
 more info about foundry: [foundry book](https://book.getfoundry.sh/)
 

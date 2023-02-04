@@ -2,7 +2,7 @@
 pragma solidity ^0.8.9;
 
 import "forge-std/Script.sol";
-import "../src/Credentials.sol";
+import "src/Credentials/Credentials.sol";
 
 contract LocalDeploy is Script {
     function run() external {

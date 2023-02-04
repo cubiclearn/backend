@@ -2,7 +2,7 @@
 pragma solidity ^0.8.9;
 
 import "forge-std/Test.sol";
-import "src/Factory.sol";
+import "src/Credentials/Factory.sol";
 
 contract FactoryTest is Test {
     CredentialsFactory public factory;

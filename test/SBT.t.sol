@@ -2,7 +2,7 @@
 pragma solidity ^0.8.13;
 
 import "forge-std/Test.sol";
-import "../src/SBT.sol";
+import "src/Credentials/SBT.sol";
 
 contract SbtTest is Test {
     SoulboundNFT public sbt;

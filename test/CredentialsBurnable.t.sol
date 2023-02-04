@@ -4,7 +4,7 @@ pragma solidity ^0.8.9;
 
 import "forge-std/Test.sol";
 
-import "src/CredentialsBurnable.sol";
+import "src/Credentials/CredentialsBurnable.sol";
 
 contract CredentialsBurnableTest is Test {
     CredentialsBurnable public cb;

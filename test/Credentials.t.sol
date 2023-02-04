@@ -2,7 +2,7 @@
 pragma solidity ^0.8.9;
 
 import "forge-std/Test.sol";
-import "../src/Credentials.sol";
+import "src/Credentials/Credentials.sol";
 
 contract CredentialsTest is Test {
     Credentials public creds;
