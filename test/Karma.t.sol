@@ -8,7 +8,7 @@ contract KarmaTest is Test {
     Karma public karma;
 
     function setUp() public {
-        karma = new Karma(address(this));
+        karma = new Karma();
     }
 
     function testOperator() public {

@@ -48,13 +48,3 @@ interface IERC4974 {
     /// @return int8 The rating assigned.
     function ratingOf(address _rated) external view returns (int8);
 }
-
-interface IERC165 {
-    /// @notice Query if a contract implements an interface.
-    /// @dev Interface identification is specified in EIP-165. This function
-    ///  uses less than 30,000 gas.
-    /// @param interfaceID The interface identifier, as specified in EIP-165.
-    /// @return bool `true` if the contract implements `interfaceID` and
-    ///  `interfaceID` is not 0xffffffff, `false` otherwise.
-    function supportsInterface(bytes4 interfaceID) external view returns (bool);
-}
