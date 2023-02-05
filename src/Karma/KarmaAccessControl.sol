@@ -2,7 +2,7 @@
 pragma solidity ^0.8.9;
 
 import "src/Karma/Karma.sol";
-import "src/Credentials/Credentials.sol";
+import "src/Credentials/SBT.sol";
 
 /// @title Karma with access restricted to user with credentials
 /// @author donnoh.eth
@@ -10,9 +10,9 @@ import "src/Credentials/Credentials.sol";
 /// from the Credentials operator.
 
 contract KarmaAccessControl is Karma {
-    Credentials public credentials;
+    SoulboundNFT public credentials;
 
-    constructor(Credentials _credentials) Karma() {
+    constructor(SoulboundNFT _credentials) Karma() {
         credentials = _credentials;
     }
 
