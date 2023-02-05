@@ -9,8 +9,8 @@ contract CredentialsTest is Test {
     CredentialsHarness public credsHarness;
     Receiver public receiver;
 
-    address owner = address(0x69);
-    address notOwner = address(0x42);
+    address owner = makeAddr("owner");
+    address notOwner = makeAddr("notOwner");
 
     function setUp() public {
         vm.startPrank(owner);

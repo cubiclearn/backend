@@ -10,7 +10,7 @@ contract SbtBurnableTest is Test {
     SoulboundNftBurnableHarness public sbtbHarness;
     Receiver public receiver;
 
-    address public bob = address(0xb0b);
+    address public bob = makeAddr("bob");
 
     function setUp() public {
         sbtb = new SoulboundNFTBurnable("Soulbound NFT", "SBT", "https://sbt.com/");

@@ -10,7 +10,7 @@ contract CredentialsBurnableTest is Test {
     CredentialsBurnable public cb;
     CredentialsBurnableHarness public cbh;
 
-    address owner = address(0x69);
+    address owner = makeAddr("owner");
 
     function setUp() public {
         vm.startPrank(owner);
