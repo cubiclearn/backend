@@ -10,17 +10,17 @@ contracts &amp; tests
 
 ```ml
 src
-├── IERC5192 — "Minimal Soulbound Token Interface"
-├── IERC5484 — "Consensual Soulbound Tokens Interface"
-├── SBT — "Implementation of IERC5192 extending ERC721"
-├── SBTBurnable — "Implementation of IERC5484 extending SBT"
-├── Credentials — "Mintable and Ownable SBT"
-└── CredentialsBurnable — "Credentials with burn authorization"
-test
-├── SBT — "SBT tests"
-├── SBTBurnable — "SBTBurnable tests"
-├── Credentials — "Credentials tests"
-└── CredentialsBurnable — "CredentialsBurnable tests"
+├── Credentials
+│   ├── IERC5192 — "Minimal Soulbound Token Interface"
+│   ├── IERC5484 — "Consensual Soulbound Tokens Interface"
+│   ├── SBT — "Implementation of IERC5192 extending ERC721"
+│   ├── SBTBurnable — "Implementation of IERC5484 extending SBT"
+│   ├── Credentials — "Mintable and Ownable SBT"
+│   └── CredentialsBurnable — "Credentials with burn authorization"
+├── Karma
+│   ├── IERC4974 — "Ratings"
+│   ├── Karma — "Implementation of IERC4974"
+│   └── KarmaAccessControl — "Karma with Credentials access control"
 ```
 
 ## Installation
