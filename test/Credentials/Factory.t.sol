@@ -15,7 +15,7 @@ contract FactoryTest is Test {
 
     function testCreateCredentials() public {
         vm.expectEmit(true, false, false, true);
-        emit CredentialsCreated(address(this), address(0x0), false);
+        emit CredentialsCreated(address(this), makeAddr("not checked"), false);
         address credentials = factory.createCredentials("Test", "TST", "https://test.com/", 100);
         Credentials c = Credentials(credentials);
         assertEq(c.owner(), address(this));
@@ -25,7 +25,7 @@ contract FactoryTest is Test {
 
     function testCreateCredentialsBurnable() public {
         vm.expectEmit(true, false, false, true);
-        emit CredentialsCreated(address(this), address(0x0), true);
+        emit CredentialsCreated(address(this), makeAddr("not checked"), true);
         address credentials = factory.createCredentialsBurnable("Test", "TST", "https://test.com/", 100);
         CredentialsBurnable c = CredentialsBurnable(credentials);
         assertEq(c.owner(), address(this));
