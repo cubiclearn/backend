@@ -2,6 +2,7 @@
 pragma solidity ^0.8.9;
 
 import "src/Karma/IERC4974.sol";
+import "@openzeppelin/contracts/utils/introspection/IERC165.sol";
 
 contract Karma is IERC4974, IERC165 {
     address public operator;
@@ -12,8 +13,8 @@ contract Karma is IERC4974, IERC165 {
         _;
     }
 
-    constructor(address _operator) {
-        operator = _operator;
+    constructor() {
+        operator = msg.sender;
     }
 
     function setOperator(address _operator) external override onlyOperator {
@@ -28,9 +29,8 @@ contract Karma is IERC4974, IERC165 {
         emit NewOperator(address(0));
     }
 
-    function rate(address _user, int8 _rating) external override onlyOperator {
-        karma[_user] = _rating;
-        emit Rating(_user, _rating);
+    function rate(address _user, int8 _rating) external virtual override onlyOperator {
+        _rate(_user, _rating);
     }
 
     function removeRating(address _user) external override onlyOperator {
@@ -44,5 +44,10 @@ contract Karma is IERC4974, IERC165 {
 
     function supportsInterface(bytes4 interfaceID) external pure override returns (bool) {
         return interfaceID == type(IERC4974).interfaceId;
+    }
+
+    function _rate(address _user, int8 _rating) internal {
+        karma[_user] = _rating;
+        emit Rating(_user, _rating);
     }
 }
