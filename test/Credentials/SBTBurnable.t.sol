@@ -16,7 +16,6 @@ contract SbtBurnableTest is Test {
         sbtb = new SoulboundNFTBurnable("Soulbound NFT", "SBT", "https://sbt.com/");
         sbtbHarness = new SoulboundNftBurnableHarness("Soulbound NFT", "SBT", "https://sbt.com/");
         receiver = new Receiver();
-        vm.stopPrank();
     }
 
     function testFuzzIssuer(address issuer) public {
