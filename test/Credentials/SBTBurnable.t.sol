@@ -2,21 +2,20 @@
 pragma solidity ^0.8.9;
 
 import "forge-std/Test.sol";
-import "../src/SBTBurnable.sol";
-import "../src/IERC5484.sol";
+import "src/Credentials/SBTBurnable.sol";
+import "src/Credentials/IERC5484.sol";
 
 contract SbtBurnableTest is Test {
     SoulboundNFTBurnable public sbtb;
     SoulboundNftBurnableHarness public sbtbHarness;
     Receiver public receiver;
 
-    address public bob = address(0xb0b);
+    address public bob = makeAddr("bob");
 
     function setUp() public {
         sbtb = new SoulboundNFTBurnable("Soulbound NFT", "SBT", "https://sbt.com/");
         sbtbHarness = new SoulboundNftBurnableHarness("Soulbound NFT", "SBT", "https://sbt.com/");
         receiver = new Receiver();
-        vm.stopPrank();
     }
 
     function testFuzzIssuer(address issuer) public {

@@ -2,15 +2,15 @@
 pragma solidity ^0.8.13;
 
 import "forge-std/Test.sol";
-import "../src/SBT.sol";
+import "src/Credentials/SBT.sol";
 
 contract SbtTest is Test {
     SoulboundNFT public sbt;
     SoulboundNftHarness public sbtHarness;
     Receiver public receiver;
 
-    address owner = address(0x69);
-    address notOwner = address(0x42);
+    address owner = makeAddr("owner");
+    address notOwner = makeAddr("notOwner");
 
     function setUp() public {
         vm.startPrank(owner);

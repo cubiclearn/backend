@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.16;
 
-import "./SBT.sol";
+import "src/Credentials/SBT.sol";
 
 contract Credentials is SoulboundNFT, Ownable {
     uint256 public immutable MAX_SUPPLY;
