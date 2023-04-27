@@ -4,6 +4,7 @@ pragma solidity ^0.8.9;
 import "src/Karma/IERC4974uint64.sol";
 
 import "@openzeppelin/contracts/utils/introspection/IERC165.sol";
+import "@openzeppelin/contracts/utils/math/Math.sol";
 
 contract Karmauint64 is IERC4974uint64, IERC165 {
     address public operator;
@@ -41,6 +42,11 @@ contract Karmauint64 is IERC4974uint64, IERC165 {
 
     function ratingOf(address _user) external view override returns (uint64) {
         return karma[_user];
+    }
+
+    function quadraticRatingOf(address _user) external view returns (uint64) {
+        uint64 _karma = karma[_user];
+        return uint64(Math.sqrt(_karma));
     }
 
     function supportsInterface(bytes4 interfaceID) external pure override returns (bool) {
