@@ -15,8 +15,8 @@ contract Karmauint64 is IERC4974uint64, IERC165 {
         _;
     }
 
-    constructor() {
-        operator = msg.sender;
+    constructor(address _operator) {
+        operator = _operator;
     }
 
     function setOperator(address _operator) external override onlyOperator {

@@ -13,8 +13,8 @@ contract Karma is IERC4974, IERC165 {
         _;
     }
 
-    constructor() {
-        operator = msg.sender;
+    constructor(address _operator) {
+        operator = _operator;
     }
 
     function setOperator(address _operator) external override onlyOperator {

@@ -8,7 +8,7 @@ contract Karmauint64Test is Test {
     Karmauint64 public karma;
 
     function setUp() public {
-        karma = new Karmauint64();
+        karma = new Karmauint64(address(this));
     }
 
     function testOperator() public {

@@ -11,7 +11,7 @@ contract LocalDeploy is Script {
         vm.startBroadcast(deployerPrivateKey);
 
         SoulboundNFT creds = new Credentials("Credentials", "CREDS", "https://creds.com/", 100);
-        new KarmaAccessControluint64(creds);
+        new KarmaAccessControluint64(creds, vm.envAddress("OPERATOR"));
 
         vm.stopBroadcast();
     }

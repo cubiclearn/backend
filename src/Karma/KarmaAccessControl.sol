@@ -12,7 +12,7 @@ import "src/Credentials/SBT.sol";
 contract KarmaAccessControl is Karma {
     SoulboundNFT public credentials;
 
-    constructor(SoulboundNFT _credentials) Karma() {
+    constructor(SoulboundNFT _credentials, address _operator) Karma(_operator) {
         credentials = _credentials;
     }
 

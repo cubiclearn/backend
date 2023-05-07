@@ -9,7 +9,7 @@ contract LocalDeploy is Script {
         uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
         vm.startBroadcast(deployerPrivateKey);
 
-        new KarmaAccessControluint64(SoulboundNFT(vm.envAddress("CREDENTIALS")));
+        new KarmaAccessControluint64(SoulboundNFT(vm.envAddress("CREDENTIALS")), vm.envAddress("OPERATOR"));
 
         vm.stopBroadcast();
     }

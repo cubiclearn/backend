@@ -15,10 +15,10 @@ contract KarmaAccessControluint64Test is Test {
 
     function setUp() public {
         credentials = new Credentials("TEST", "TST", "https://test.com/", 100);
-        karmaCredentials = new KarmaAccessControluint64(credentials);
+        karmaCredentials = new KarmaAccessControluint64(credentials, address(this));
 
         credentialsBurnable = new CredentialsBurnable("TEST", "TST", "https://test.com/", 100);
-        karmaCredentialsBurnable = new KarmaAccessControluint64(credentialsBurnable);
+        karmaCredentialsBurnable = new KarmaAccessControluint64(credentialsBurnable, address(this));
     }
 
     function testHasCredentialAccess() public {

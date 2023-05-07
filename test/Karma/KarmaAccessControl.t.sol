@@ -15,10 +15,10 @@ contract KarmaAccessControlTest is Test {
 
     function setUp() public {
         credentials = new Credentials("TEST", "TST", "https://test.com/", 100);
-        karmaCredentials = new KarmaAccessControl(credentials);
+        karmaCredentials = new KarmaAccessControl(credentials, address(this));
 
         credentialsBurnable = new CredentialsBurnable("TEST", "TST", "https://test.com/", 100);
-        karmaCredentialsBurnable = new KarmaAccessControl(credentialsBurnable);
+        karmaCredentialsBurnable = new KarmaAccessControl(credentialsBurnable, address(this));
     }
 
     function testHasCredentialAccess() public {
