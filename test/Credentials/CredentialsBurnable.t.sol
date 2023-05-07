@@ -8,14 +8,12 @@ import "src/Credentials/CredentialsBurnable.sol";
 
 contract CredentialsBurnableTest is Test {
     CredentialsBurnable public cb;
-    CredentialsBurnableHarness public cbh;
 
     address owner = makeAddr("owner");
 
     function setUp() public {
         vm.startPrank(owner);
         cb = new CredentialsBurnable("Credentials", "CRED", "https://cred.com/", 100);
-        cbh = new CredentialsBurnableHarness("Credentials", "CRED", "https://cred.com/", 100);
         vm.stopPrank();
     }
 
@@ -139,18 +137,8 @@ contract CredentialsBurnableTest is Test {
 
     function testOwnerCanSetBaseURI() public {
         vm.startPrank(owner);
-        cbh.setBaseURI("https://example777.com/");
+        cb.setBaseURI("https://example777.com/");
         vm.stopPrank();
-        assertEq(cbh.exposed_baseURI(), "https://example777.com/");
-    }
-}
-
-contract CredentialsBurnableHarness is CredentialsBurnable {
-    constructor(string memory name, string memory symbol, string memory baseURI, uint256 maxSupply)
-        CredentialsBurnable(name, symbol, baseURI, maxSupply)
-    {}
-
-    function exposed_baseURI() public view returns (string memory) {
-        return _baseURI();
+        assertEq(cb.baseURI(), "https://example777.com/");
     }
 }
