@@ -52,11 +52,15 @@ contract SoulboundNFT is ERC721, ERC721Enumerable, ERC721URIStorage, IERC5192 {
         _baseURIextended = baseURI_;
     }
 
-    // Required Overrides
-
-    function _baseURI() internal view virtual override returns (string memory) {
+    function _baseURI() internal view override returns (string memory) {
         return _baseURIextended;
     }
+
+    function baseURI() external view returns (string memory) {
+        return _baseURI();
+    }
+
+    // Required Overrides
 
     function _beforeTokenTransfer(address from, address to, uint256 tokenId, uint256 batchSize)
         internal

@@ -6,7 +6,6 @@ import "src/Credentials/Credentials.sol";
 
 contract CredentialsTest is Test {
     Credentials public creds;
-    CredentialsHarness public credsHarness;
     Receiver public receiver;
 
     address owner = makeAddr("owner");
@@ -15,7 +14,6 @@ contract CredentialsTest is Test {
     function setUp() public {
         vm.startPrank(owner);
         creds = new Credentials("Credentials", "CREDS", "https://creds.com/", 100);
-        credsHarness = new CredentialsHarness("Credentials", "CREDS", "https://creds.com/", 100);
         receiver = new Receiver();
         vm.stopPrank();
     }
@@ -103,8 +101,8 @@ contract CredentialsTest is Test {
 
     function testSetBaseURI() public {
         vm.prank(owner);
-        credsHarness.setBaseURI("https://creds2.com/");
-        assertEq(credsHarness.exposed_baseURI(), "https://creds2.com/");
+        creds.setBaseURI("https://creds2.com/");
+        assertEq(creds.baseURI(), "https://creds2.com/");
     }
 }
 
@@ -115,16 +113,5 @@ contract Receiver {
 
     constructor() {
         // solhint-disable-previous-line no-empty-blocks
-    }
-}
-
-contract CredentialsHarness is Credentials {
-    constructor(string memory _name, string memory _symbol, string memory _bUri, uint256 maxSupply)
-        payable
-        Credentials(_name, _symbol, _bUri, maxSupply)
-    {}
-
-    function exposed_baseURI() public view returns (string memory) {
-        return _baseURI();
     }
 }
