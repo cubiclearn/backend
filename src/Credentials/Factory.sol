@@ -9,48 +9,25 @@ contract CredentialsFactory {
     event CredentialsCreated(address indexed creator, address indexed credentials, bool burnable);
     event KarmaAccessControlCreated(address indexed creator, address indexed karmaAccessControl);
 
-    function createCredentials(string memory _name, string memory _symbol, string memory _bUri, uint256 maxSupply)
-        public
-        returns (address)
-    {
-        Credentials credentials = new Credentials(_name, _symbol, _bUri, maxSupply);
-        credentials.transferOwnership(msg.sender);
-        emit CredentialsCreated(msg.sender, address(credentials), false);
-        return address(credentials);
-    }
-
-    function createCredentialsBurnable(
-        string memory _name,
-        string memory _symbol,
-        string memory _bUri,
-        uint256 maxSupply
-    ) public returns (address) {
-        CredentialsBurnable credentials = new CredentialsBurnable(_name, _symbol, _bUri, maxSupply);
-        credentials.transferOwnership(msg.sender);
-        emit CredentialsCreated(msg.sender, address(credentials), true);
-        return address(credentials);
-    }
-
-    function createKarmaAccessControl(address credentials) public returns (address) {
-        KarmaAccessControluint64 karmaAccessControl = new KarmaAccessControluint64(Credentials(credentials), msg.sender);
-        emit KarmaAccessControlCreated(msg.sender, address(karmaAccessControl));
-        return address(karmaAccessControl);
-    }
-
     function createCourse(
         bool isBurnable,
         string memory _name,
         string memory _symbol,
         string memory _bUri,
         uint256 maxSupply
-    ) public returns (address, address) {
+    ) external returns (address, address) {
         Credentials creds;
         if (isBurnable) {
-            creds = Credentials(createCredentialsBurnable(_name, _symbol, _bUri, maxSupply));
+            creds = Credentials(address(new CredentialsBurnable(_name, _symbol, _bUri, maxSupply)));
+            creds.transferOwnership(msg.sender);
+            emit CredentialsCreated(msg.sender, address(creds), true);
         } else {
-            creds = Credentials(createCredentials(_name, _symbol, _bUri, maxSupply));
+            creds = Credentials(address(new Credentials(_name, _symbol, _bUri, maxSupply)));
+            creds.transferOwnership(msg.sender);
+            emit CredentialsCreated(msg.sender, address(creds), false);
         }
-        address karmaAccessControl = createKarmaAccessControl(address(creds));
+        address karmaAccessControl = address(new KarmaAccessControluint64(Credentials(creds), msg.sender));
+        emit KarmaAccessControlCreated(msg.sender, address(karmaAccessControl));
         return (address(creds), karmaAccessControl);
     }
 }
