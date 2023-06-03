@@ -6,7 +6,6 @@ import "src/Credentials/CredentialsBurnable.sol";
 import "src/Karma/KarmaAccessControluint64.sol";
 
 contract CredentialsFactory {
-    event CredentialsCreated(address indexed creator, address indexed credentials, bool burnable);
     event KarmaAccessControlCreated(address indexed creator, address indexed karmaAccessControl);
 
     function createCourse(
@@ -20,11 +19,9 @@ contract CredentialsFactory {
         if (isBurnable) {
             creds = Credentials(address(new CredentialsBurnable(_name, _symbol, _bUri, maxSupply)));
             creds.transferOwnership(msg.sender);
-            emit CredentialsCreated(msg.sender, address(creds), true);
         } else {
             creds = Credentials(address(new Credentials(_name, _symbol, _bUri, maxSupply)));
             creds.transferOwnership(msg.sender);
-            emit CredentialsCreated(msg.sender, address(creds), false);
         }
         address karmaAccessControl = address(new KarmaAccessControluint64(Credentials(creds), msg.sender));
         emit KarmaAccessControlCreated(msg.sender, address(karmaAccessControl));

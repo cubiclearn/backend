@@ -14,7 +14,7 @@ contract CredentialsBurnable is SoulboundNFTBurnable, Ownable {
 
     function mint(address to, string memory uri, BurnAuth bAuth) external onlyOwner {
         uint256 ts = totalSupply();
-        require(ts + 1 <= MAX_SUPPLY, "Mint would exceed max supply");
+        require(ts + 1 <= MAX_SUPPLY, "MAX_SUPPLY");
         _safeMint(to, ts);
         _setTokenURI(ts, uri);
         _setBurnAuth(ts, bAuth);
@@ -25,10 +25,8 @@ contract CredentialsBurnable is SoulboundNFTBurnable, Ownable {
 
     function multiMint(address[] memory to, string[] memory uri, BurnAuth[] memory bAuth) external onlyOwner {
         uint256 ts = totalSupply();
-        require(ts + to.length <= MAX_SUPPLY, "Mint would exceed max supply");
-        require(
-            to.length == uri.length && to.length == bAuth.length, "to, uri, and bAuth arrays must be the same length"
-        );
+        require(ts + to.length <= MAX_SUPPLY, "MAX_SUPPLY");
+        require(to.length == uri.length && to.length == bAuth.length, "LENGTH_MISMATCH");
         for (uint256 i = 0; i < to.length; i++) {
             _safeMint(to[i], ts + i);
             _setTokenURI(ts + i, uri[i]);

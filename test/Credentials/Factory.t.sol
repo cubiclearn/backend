@@ -15,9 +15,6 @@ contract FactoryTest is Test {
     event KarmaAccessControlCreated(address indexed creator, address indexed karmaAccessControl);
 
     function testCreateCourse() public {
-        vm.expectEmit(true, false, false, true);
-        emit CredentialsCreated(address(this), makeAddr("not checked"), false);
-        emit KarmaAccessControlCreated(address(this), makeAddr("not checked"));
         (address credentials, address karmaAccessControl) =
             factory.createCourse(false, "Test", "TST", "https://test.com/", 100);
         Credentials c = Credentials(credentials);
@@ -30,9 +27,6 @@ contract FactoryTest is Test {
     }
 
     function testCreateCourseBurnable() public {
-        vm.expectEmit(true, false, false, true);
-        emit CredentialsCreated(address(this), makeAddr("not checked"), true);
-        emit KarmaAccessControlCreated(address(this), makeAddr("not checked"));
         (address credentials, address karmaAccessControl) =
             factory.createCourse(true, "Test", "TST", "https://test.com/", 100);
         CredentialsBurnable c = CredentialsBurnable(credentials);

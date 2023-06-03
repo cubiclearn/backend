@@ -25,12 +25,12 @@ contract SbtBurnableTest is Test {
     }
 
     function testCannotSetIssuerOfNonexistentToken() public {
-        vm.expectRevert("Token does not exist");
+        vm.expectRevert("INEXISTENT");
         sbtbHarness.exposed_setIssuer(0, bob);
     }
 
     function testCannotGetIssuerOfNonexistentToken() public {
-        vm.expectRevert("Token does not exist");
+        vm.expectRevert("INEXISTENT");
         sbtbHarness.issuerOf(0);
     }
 
@@ -46,12 +46,12 @@ contract SbtBurnableTest is Test {
     }
 
     function testCannotSetBurnAuthOfNonexistentToken() public {
-        vm.expectRevert("Token does not exist");
+        vm.expectRevert("INEXISTENT");
         sbtbHarness.exposed_setBurnAuth(0, IERC5484.BurnAuth.OwnerOnly);
     }
 
     function testCannotGetBurnAuthOfNonexistentToken() public {
-        vm.expectRevert("Token does not exist");
+        vm.expectRevert("INEXISTENT");
         sbtbHarness.burnAuth(0);
     }
 
@@ -99,7 +99,7 @@ contract SbtBurnableTest is Test {
         sbtbHarness.exposed_safeMint(bob, 0);
         sbtbHarness.exposed_setBurnAuth(0, IERC5484.BurnAuth.Neither);
         vm.prank(bob);
-        vm.expectRevert("Caller is not authorized to burn this token");
+        vm.expectRevert("CANNOT_BURN");
         sbtbHarness.burn(0);
     }
 
@@ -107,7 +107,7 @@ contract SbtBurnableTest is Test {
         sbtbHarness.exposed_safeMint(bob, 0);
         sbtbHarness.exposed_setBurnAuth(0, IERC5484.BurnAuth.Neither);
         sbtbHarness.exposed_setIssuer(0, address(this));
-        vm.expectRevert("Caller is not authorized to burn this token");
+        vm.expectRevert("CANNOT_BURN");
         sbtbHarness.burn(0);
     }
 
@@ -115,7 +115,7 @@ contract SbtBurnableTest is Test {
         sbtbHarness.exposed_safeMint(bob, 0);
         sbtbHarness.exposed_setBurnAuth(0, IERC5484.BurnAuth.OwnerOnly);
         sbtbHarness.exposed_setIssuer(0, address(this));
-        vm.expectRevert("Caller is not authorized to burn this token");
+        vm.expectRevert("CANNOT_BURN");
         sbtbHarness.burn(0);
     }
 
@@ -123,13 +123,13 @@ contract SbtBurnableTest is Test {
         sbtbHarness.exposed_safeMint(bob, 0);
         sbtbHarness.exposed_setBurnAuth(0, IERC5484.BurnAuth.IssuerOnly);
         sbtbHarness.exposed_setIssuer(0, address(this));
-        vm.expectRevert("Caller is not authorized to burn this token");
+        vm.expectRevert("CANNOT_BURN");
         vm.prank(bob);
         sbtbHarness.burn(0);
     }
 
     function testCannotBurnNonexistentToken() public {
-        vm.expectRevert("Token does not exist");
+        vm.expectRevert("INEXISTENT");
         sbtbHarness.burn(0);
     }
 }

@@ -16,23 +16,23 @@ contract SoulboundNFTBurnable is SoulboundNFT, IERC5484 {
     constructor(string memory _name, string memory _symbol, string memory _uri) SoulboundNFT(_name, _symbol, _uri) {}
 
     function burnAuth(uint256 tokenId) external view override returns (BurnAuth) {
-        require(_exists(tokenId), "Token does not exist");
+        require(_exists(tokenId), "INEXISTENT");
         return _burnAuth[tokenId];
     }
 
     function issuerOf(uint256 tokenId) external view returns (address) {
-        require(_exists(tokenId), "Token does not exist");
+        require(_exists(tokenId), "INEXISTENT");
         return _issuer[tokenId];
     }
 
     function burn(uint256 tokenId) external {
-        require(_exists(tokenId), "Token does not exist");
+        require(_exists(tokenId), "INEXISTENT");
         address tokenOwner = ownerOf(tokenId);
         require(
             _burnAuth[tokenId] == BurnAuth.OwnerOnly && msg.sender == tokenOwner
                 || _burnAuth[tokenId] == BurnAuth.IssuerOnly && msg.sender == _issuer[tokenId]
                 || _burnAuth[tokenId] == BurnAuth.Both && (msg.sender == tokenOwner || msg.sender == _issuer[tokenId]),
-            "Caller is not authorized to burn this token"
+            "CANNOT_BURN"
         );
         super._burn(tokenId);
     }
@@ -42,12 +42,12 @@ contract SoulboundNFTBurnable is SoulboundNFT, IERC5484 {
     }
 
     function _setBurnAuth(uint256 tokenId, BurnAuth auth) internal {
-        require(_exists(tokenId), "Token does not exist");
+        require(_exists(tokenId), "INEXISTENT");
         _burnAuth[tokenId] = auth;
     }
 
     function _setIssuer(uint256 tokenId, address issuer) internal {
-        require(_exists(tokenId), "Token does not exist");
+        require(_exists(tokenId), "INEXISTENT");
         _issuer[tokenId] = issuer;
     }
 }

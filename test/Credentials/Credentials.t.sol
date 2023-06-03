@@ -44,7 +44,7 @@ contract CredentialsTest is Test {
         for (uint256 i = 0; i < 100; i++) {
             creds.mint(owner, "1.json");
         }
-        vm.expectRevert("Mint would exceed max supply");
+        vm.expectRevert("MAX_SUPPLY");
         creds.mint(owner, "1.json");
     }
 
@@ -59,7 +59,7 @@ contract CredentialsTest is Test {
             uri[i] = "1.json";
         }
         creds.multiMint(to, uri);
-        vm.expectRevert("Mint would exceed max supply");
+        vm.expectRevert("MAX_SUPPLY");
         creds.multiMint(to, uri);
     }
 
@@ -86,7 +86,7 @@ contract CredentialsTest is Test {
         string[] memory uri = new string[](1);
         uri[0] = "1.json";
         vm.prank(owner);
-        vm.expectRevert("to and uri arrays must be the same length");
+        vm.expectRevert("LENGTH_MISMATCH");
         creds.multiMint(to, uri);
     }
 

@@ -26,7 +26,7 @@ contract SoulboundNFT is ERC721, ERC721Enumerable, ERC721URIStorage, IERC5192 {
     string private _baseURIextended;
 
     modifier onlyAllowed(address from, address to, uint256 tokenId) virtual {
-        require(from == address(0), "token is locked");
+        require(from == address(0), "LOCKED");
         _;
     }
 
@@ -40,7 +40,7 @@ contract SoulboundNFT is ERC721, ERC721Enumerable, ERC721URIStorage, IERC5192 {
     }
 
     function locked(uint256 tokenId) external view override returns (bool) {
-        require(_exists(tokenId), "Token does not exist");
+        require(_exists(tokenId), "INEXISTENT");
         return true;
     }
 

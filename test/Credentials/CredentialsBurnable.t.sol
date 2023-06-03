@@ -35,7 +35,7 @@ contract CredentialsBurnableTest is Test {
             cb.mint(owner, "1", IERC5484.BurnAuth.OwnerOnly);
         }
         assertEq(cb.totalSupply(), 100);
-        vm.expectRevert("Mint would exceed max supply");
+        vm.expectRevert("MAX_SUPPLY");
         cb.mint(owner, "1", IERC5484.BurnAuth.OwnerOnly);
         vm.stopPrank();
     }
@@ -71,7 +71,7 @@ contract CredentialsBurnableTest is Test {
         IERC5484.BurnAuth[] memory bAuth = new IERC5484.BurnAuth[](2);
         bAuth[0] = IERC5484.BurnAuth.OwnerOnly;
         bAuth[1] = IERC5484.BurnAuth.OwnerOnly;
-        vm.expectRevert("Mint would exceed max supply");
+        vm.expectRevert("MAX_SUPPLY");
         cb.multiMint(to, uri, bAuth);
         vm.stopPrank();
     }
@@ -86,7 +86,7 @@ contract CredentialsBurnableTest is Test {
         IERC5484.BurnAuth[] memory bAuth = new IERC5484.BurnAuth[](2);
         bAuth[0] = IERC5484.BurnAuth.OwnerOnly;
         bAuth[1] = IERC5484.BurnAuth.OwnerOnly;
-        vm.expectRevert("to, uri, and bAuth arrays must be the same length");
+        vm.expectRevert("LENGTH_MISMATCH");
         cb.multiMint(to, uri, bAuth);
         vm.stopPrank();
     }
@@ -101,7 +101,7 @@ contract CredentialsBurnableTest is Test {
         uri[1] = "2";
         IERC5484.BurnAuth[] memory bAuth = new IERC5484.BurnAuth[](1);
         bAuth[0] = IERC5484.BurnAuth.OwnerOnly;
-        vm.expectRevert("to, uri, and bAuth arrays must be the same length");
+        vm.expectRevert("LENGTH_MISMATCH");
         cb.multiMint(to, uri, bAuth);
         vm.stopPrank();
     }
@@ -116,7 +116,7 @@ contract CredentialsBurnableTest is Test {
         IERC5484.BurnAuth[] memory bAuth = new IERC5484.BurnAuth[](2);
         bAuth[0] = IERC5484.BurnAuth.OwnerOnly;
         bAuth[1] = IERC5484.BurnAuth.OwnerOnly;
-        vm.expectRevert("to, uri, and bAuth arrays must be the same length");
+        vm.expectRevert("LENGTH_MISMATCH");
         cb.multiMint(to, uri, bAuth);
         vm.stopPrank();
     }

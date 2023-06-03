@@ -23,7 +23,7 @@ contract SbtTest is Test {
     function testOwnerCannotTransfer() public {
         vm.startPrank(owner);
         sbtHarness.exposed_safeMint(owner, 0);
-        vm.expectRevert("token is locked");
+        vm.expectRevert("LOCKED");
         sbtHarness.safeTransferFrom(owner, address(receiver), 0);
     }
 
@@ -31,7 +31,7 @@ contract SbtTest is Test {
         vm.prank(owner);
         sbtHarness.exposed_safeMint(address(receiver), 0);
         vm.startPrank(address(receiver));
-        vm.expectRevert("token is locked");
+        vm.expectRevert("LOCKED");
         sbtHarness.safeTransferFrom(address(receiver), owner, 0);
     }
 
@@ -46,7 +46,7 @@ contract SbtTest is Test {
     }
 
     function testLockedForNonExistentToken() public {
-        vm.expectRevert("Token does not exist");
+        vm.expectRevert("INEXISTENT");
         sbt.locked(0);
     }
 
@@ -67,7 +67,7 @@ contract SbtTest is Test {
         vm.startPrank(owner);
         sbtHarness.exposed_safeMint(owner, 0);
         assertEq(sbtHarness.totalSupply(), 1);
-        vm.expectRevert("token is locked");
+        vm.expectRevert("LOCKED");
         sbtHarness.exposed_burn(0);
     }
 }
