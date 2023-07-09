@@ -42,4 +42,12 @@ contract KarmaAccessControluint64 is Karmauint64 {
         require(hasAccess(_user), "NO_CREDENTIALS");
         super._rate(_user, _rating);
     }
+
+    function multiRate(address[] calldata _users, uint64[] calldata _ratings) external onlyOperator {
+        require(_users.length == _ratings.length, "LENGTH_MISMATCH");
+        for (uint256 i = 0; i < _users.length; i++) {
+            require(hasAccess(_users[i]), "NO_CREDENTIALS");
+            super._rate(_users[i], _ratings[i]);
+        }
+    }
 }

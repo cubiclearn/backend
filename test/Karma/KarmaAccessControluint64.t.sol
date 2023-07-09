@@ -58,4 +58,42 @@ contract KarmaAccessControluint64Test is Test {
         karmaCredentialsBurnable.rate(user, 1);
         vm.stopPrank();
     }
+
+    function testMultiRateUserWithCredentialBurnableAccess() public {
+        vm.startPrank(MAGISTER);
+        address[] memory users = new address[](10);
+        uint64[] memory ratings = new uint64[](10);
+        for (uint64 i = 0; i < 10; i++) {
+            users[i] = vm.addr(i + 1);
+            credentialsBurnable.mint(users[i], "1", IERC5484.BurnAuth.Neither);
+            assertEq(karmaCredentialsBurnable.hasAccess(users[i]), true);
+            ratings[i] = i;
+        }
+        karmaCredentialsBurnable.multiRate(users, ratings);
+        for (uint64 i = 0; i < 10; i++) {
+            assertEq(karmaCredentialsBurnable.ratingOf(users[i]), DISCIPULUS_KARMA + i);
+        }
+    }
+
+    function testMultiRateUserWithoutCredentialBurnableAccess() public {
+        vm.startPrank(MAGISTER);
+        address[] memory users = new address[](10);
+        uint64[] memory ratings = new uint64[](10);
+        for (uint64 i = 0; i < 10; i++) {
+            users[i] = vm.addr(i + 1);
+            ratings[i] = i;
+        }
+        vm.expectRevert("NO_CREDENTIALS");
+        karmaCredentialsBurnable.multiRate(users, ratings);
+        vm.stopPrank();
+    }
+
+    function testMultiRateUserWithLengthMismatch() public {
+        vm.startPrank(MAGISTER);
+        address[] memory users = new address[](10);
+        uint64[] memory ratings = new uint64[](9);
+        vm.expectRevert("LENGTH_MISMATCH");
+        karmaCredentialsBurnable.multiRate(users, ratings);
+        vm.stopPrank();
+    }
 }
