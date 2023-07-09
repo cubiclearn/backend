@@ -6,23 +6,6 @@ contracts &amp; tests
 
 [SBTs research and considerations](https://hackmd.io/@donnoh-eth/SBTs).
 
-## project structure
-
-```ml
-src
-├── Credentials
-│   ├── IERC5192 — "Minimal Soulbound Token Interface"
-│   ├── IERC5484 — "Consensual Soulbound Tokens Interface"
-│   ├── SBT — "Implementation of IERC5192 extending ERC721"
-│   ├── SBTBurnable — "Implementation of IERC5484 extending SBT"
-│   ├── Credentials — "Mintable and Ownable SBT"
-│   └── CredentialsBurnable — "Credentials with burn authorization"
-├── Karma
-│   ├── IERC4974 — "Ratings"
-│   ├── Karma — "Implementation of IERC4974"
-│   └── KarmaAccessControl — "Karma with Credentials access control"
-```
-
 ## Installation
 
 - Install [foundry](https://github.com/foundry-rs/foundry).
