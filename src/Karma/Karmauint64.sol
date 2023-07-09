@@ -44,12 +44,12 @@ contract Karmauint64 is IERC4974uint64, IERC165 {
         emit Removal(_user);
     }
 
-    function ratingOf(address _user) external view override returns (uint64) {
+    function ratingOf(address _user) public view virtual override returns (uint64) {
         return karma[_user];
     }
 
     function quadraticRatingOf(address _user) external view returns (uint64) {
-        uint64 _karma = karma[_user];
+        uint64 _karma = this.ratingOf(_user);
         return uint64(Math.sqrt(_karma));
     }
 

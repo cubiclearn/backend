@@ -12,7 +12,7 @@ contract LocalDeploy is Script {
 
         CredentialsBurnable creds =
             new CredentialsBurnable(msg.sender, "Credentials", "CREDS", "https://creds.com/", 100);
-        new KarmaAccessControluint64(creds, vm.envAddress("OPERATOR"));
+        new KarmaAccessControluint64(creds, 0, 0);
 
         vm.stopBroadcast();
     }

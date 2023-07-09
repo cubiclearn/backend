@@ -12,13 +12,26 @@ import "src/Credentials/CredentialsBurnable.sol";
 
 contract KarmaAccessControluint64 is Karmauint64 {
     CredentialsBurnable public credentials;
+    uint64 public immutable BASE_MAGISTER_KARMA;
+    uint64 public immutable BASE_DISCIPULUS_KARMA;
 
     function isOperator(address _operator) external view override returns (bool) {
         return credentials.hasRole(credentials.MAGISTER_ROLE(), _operator);
     }
 
-    constructor(CredentialsBurnable _credentials, address _operator) Karmauint64(_operator) {
+    constructor(CredentialsBurnable _credentials, uint64 _baseMagisterKarma, uint64 _baseDiscipulusKarma)
+        Karmauint64(address(0))
+    {
         credentials = _credentials;
+        BASE_MAGISTER_KARMA = _baseMagisterKarma;
+        BASE_DISCIPULUS_KARMA = _baseDiscipulusKarma;
+    }
+
+    function ratingOf(address _user) public view override returns (uint64) {
+        if (credentials.hasRole(credentials.MAGISTER_ROLE(), _user)) {
+            return BASE_MAGISTER_KARMA + super.ratingOf(_user);
+        }
+        return BASE_DISCIPULUS_KARMA + super.ratingOf(_user);
     }
 
     function hasAccess(address _user) public view returns (bool) {
