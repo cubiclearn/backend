@@ -2,6 +2,7 @@
 pragma solidity ^0.8.16;
 
 import "src/Credentials/SBT.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract Credentials is SoulboundNFT, Ownable {
     uint256 public immutable MAX_SUPPLY;

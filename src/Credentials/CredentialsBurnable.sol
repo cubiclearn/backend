@@ -2,6 +2,7 @@
 pragma solidity ^0.8.16;
 
 import "src/Credentials/SBTBurnable.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract CredentialsBurnable is SoulboundNFTBurnable, Ownable {
     uint256 public immutable MAX_SUPPLY;
