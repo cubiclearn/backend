@@ -24,6 +24,7 @@ contract CredentialsBurnable is SoulboundNFTBurnable, AccessControl {
     function mint(address to, string memory uri, BurnAuth bAuth) external onlyMagister {
         uint256 ts = totalSupply();
         require(ts + 1 <= MAX_SUPPLY, "MAX_SUPPLY");
+        require(balanceOf(to) == 0, "ALREADY_MINTED");
         _safeMint(to, ts);
         _setTokenURI(ts, uri);
         _setBurnAuth(ts, bAuth);
@@ -37,6 +38,7 @@ contract CredentialsBurnable is SoulboundNFTBurnable, AccessControl {
         require(ts + to.length <= MAX_SUPPLY, "MAX_SUPPLY");
         require(to.length == uri.length && to.length == bAuth.length, "LENGTH_MISMATCH");
         for (uint256 i = 0; i < to.length; i++) {
+            require(balanceOf(to[i]) == 0, "ALREADY_MINTED");
             _safeMint(to[i], ts + i);
             _setTokenURI(ts + i, uri[i]);
             _setBurnAuth(ts + i, bAuth[i]);

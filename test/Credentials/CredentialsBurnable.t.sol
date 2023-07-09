@@ -32,7 +32,7 @@ contract CredentialsBurnableTest is Test {
     function testMintCannotExceedMaxSupply() public {
         vm.startPrank(owner);
         for (uint256 i = 0; i < 100; i++) {
-            cb.mint(owner, "1", IERC5484.BurnAuth.OwnerOnly);
+            cb.mint(vm.addr(i + 1), "1", IERC5484.BurnAuth.OwnerOnly);
         }
         assertEq(cb.totalSupply(), 100);
         vm.expectRevert("MAX_SUPPLY");
@@ -43,8 +43,8 @@ contract CredentialsBurnableTest is Test {
     function testOwnerCanMultiMint() public {
         vm.startPrank(owner);
         address[] memory to = new address[](2);
-        to[0] = owner;
-        to[1] = owner;
+        to[0] = makeAddr("to1");
+        to[1] = makeAddr("to2");
         string[] memory uri = new string[](2);
         uri[0] = "1";
         uri[1] = "2";
@@ -59,12 +59,12 @@ contract CredentialsBurnableTest is Test {
     function testMultimintCannotExceedMaxSupply() public {
         vm.startPrank(owner);
         for (uint256 i = 0; i < 100; i++) {
-            cb.mint(owner, "1", IERC5484.BurnAuth.OwnerOnly);
+            cb.mint(vm.addr(i + 1), "1", IERC5484.BurnAuth.OwnerOnly);
         }
         assertEq(cb.totalSupply(), 100);
         address[] memory to = new address[](2);
-        to[0] = owner;
-        to[1] = owner;
+        to[0] = makeAddr("to1");
+        to[1] = makeAddr("to2");
         string[] memory uri = new string[](2);
         uri[0] = "1";
         uri[1] = "2";
@@ -152,5 +152,14 @@ contract CredentialsBurnableTest is Test {
         cb.grantRole(cb.MAGISTER_ROLE(), magister);
         vm.stopPrank();
         assertTrue(cb.hasRole(cb.MAGISTER_ROLE(), magister));
+    }
+
+    function testCantMintTwiceToSameAddress() public {
+        vm.startPrank(owner);
+        address discipulus = makeAddr("Discipulus");
+        cb.mint(discipulus, "1", IERC5484.BurnAuth.OwnerOnly);
+        vm.expectRevert("ALREADY_MINTED");
+        cb.mint(discipulus, "1", IERC5484.BurnAuth.OwnerOnly);
+        vm.stopPrank();
     }
 }
