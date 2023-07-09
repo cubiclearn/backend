@@ -17,7 +17,7 @@ contract KarmaAccessControluint64Test is Test {
         credentials = new Credentials("TEST", "TST", "https://test.com/", 100);
         karmaCredentials = new KarmaAccessControluint64(credentials, address(this));
 
-        credentialsBurnable = new CredentialsBurnable("TEST", "TST", "https://test.com/", 100);
+        credentialsBurnable = new CredentialsBurnable(address(this), "TEST", "TST", "https://test.com/", 100);
         karmaCredentialsBurnable = new KarmaAccessControluint64(credentialsBurnable, address(this));
     }
 

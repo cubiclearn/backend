@@ -2,18 +2,26 @@
 pragma solidity ^0.8.16;
 
 import "src/Credentials/SBTBurnable.sol";
-import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/access/AccessControl.sol";
 
-contract CredentialsBurnable is SoulboundNFTBurnable, Ownable {
+contract CredentialsBurnable is SoulboundNFTBurnable, AccessControl {
     uint256 public immutable MAX_SUPPLY;
+    bytes32 public constant MAGISTER_ROLE = keccak256("MAGISTER_ROLE");
 
-    constructor(string memory _name, string memory _symbol, string memory _bUri, uint256 maxSupply)
+    modifier onlyMagister() {
+        require(hasRole(MAGISTER_ROLE, msg.sender), "MAGISTER_ROLE");
+        _;
+    }
+
+    constructor(address _admin, string memory _name, string memory _symbol, string memory _bUri, uint256 maxSupply)
         SoulboundNFTBurnable(_name, _symbol, _bUri)
     {
         MAX_SUPPLY = maxSupply;
+        _grantRole(MAGISTER_ROLE, _admin);
+        _grantRole(DEFAULT_ADMIN_ROLE, _admin);
     }
 
-    function mint(address to, string memory uri, BurnAuth bAuth) external onlyOwner {
+    function mint(address to, string memory uri, BurnAuth bAuth) external onlyMagister {
         uint256 ts = totalSupply();
         require(ts + 1 <= MAX_SUPPLY, "MAX_SUPPLY");
         _safeMint(to, ts);
@@ -24,7 +32,7 @@ contract CredentialsBurnable is SoulboundNFTBurnable, Ownable {
         emit Issued(msg.sender, to, ts, bAuth);
     }
 
-    function multiMint(address[] memory to, string[] memory uri, BurnAuth[] memory bAuth) external onlyOwner {
+    function multiMint(address[] memory to, string[] memory uri, BurnAuth[] memory bAuth) external onlyMagister {
         uint256 ts = totalSupply();
         require(ts + to.length <= MAX_SUPPLY, "MAX_SUPPLY");
         require(to.length == uri.length && to.length == bAuth.length, "LENGTH_MISMATCH");
@@ -38,7 +46,17 @@ contract CredentialsBurnable is SoulboundNFTBurnable, Ownable {
         }
     }
 
-    function setBaseURI(string memory _bUri) external onlyOwner {
+    function setBaseURI(string memory _bUri) external onlyMagister {
         _setBaseURI(_bUri);
+    }
+
+    function supportsInterface(bytes4 interfaceId)
+        public
+        view
+        virtual
+        override(AccessControl, SoulboundNFTBurnable)
+        returns (bool)
+    {
+        return super.supportsInterface(interfaceId);
     }
 }

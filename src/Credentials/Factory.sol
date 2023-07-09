@@ -13,8 +13,7 @@ contract CredentialsFactory {
         returns (address, address)
     {
         Credentials creds;
-        creds = Credentials(address(new CredentialsBurnable(_name, _symbol, _bUri, maxSupply)));
-        creds.transferOwnership(msg.sender);
+        creds = Credentials(address(new CredentialsBurnable(msg.sender, _name, _symbol, _bUri, maxSupply)));
         address karmaAccessControl = address(new KarmaAccessControluint64(Credentials(creds), msg.sender));
         emit KarmaAccessControlCreated(msg.sender, address(karmaAccessControl));
         return (address(creds), karmaAccessControl);

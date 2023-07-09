@@ -14,9 +14,10 @@ contract FactoryTest is Test {
     function testCreateCourse() public {
         (address credentials, address karmaAccessControl) =
             factory.createCourse("Test", "TST", "https://test.com/", 100);
-        Credentials c = Credentials(credentials);
+        CredentialsBurnable c = CredentialsBurnable(credentials);
         KarmaAccessControluint64 k = KarmaAccessControluint64(karmaAccessControl);
-        assertEq(c.owner(), address(this));
+        assertTrue(c.hasRole(c.MAGISTER_ROLE(), address(this)));
+        assertTrue(c.hasRole(c.getRoleAdmin(c.MAGISTER_ROLE()), address(this)));
         assertEq(c.name(), "Test");
         assertEq(c.symbol(), "TST");
         assertEq(k.operator(), address(this));

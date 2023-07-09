@@ -13,7 +13,7 @@ contract CredentialsBurnableTest is Test {
 
     function setUp() public {
         vm.startPrank(owner);
-        cb = new CredentialsBurnable("Credentials", "CRED", "https://cred.com/", 100);
+        cb = new CredentialsBurnable(owner, "Credentials", "CRED", "https://cred.com/", 100);
         vm.stopPrank();
     }
 
@@ -25,7 +25,7 @@ contract CredentialsBurnableTest is Test {
     }
 
     function testNotOwnerCannotMint() public {
-        vm.expectRevert("Ownable: caller is not the owner");
+        vm.expectRevert("MAGISTER_ROLE");
         cb.mint(owner, "1", IERC5484.BurnAuth.OwnerOnly);
     }
 
@@ -131,7 +131,7 @@ contract CredentialsBurnableTest is Test {
         IERC5484.BurnAuth[] memory bAuth = new IERC5484.BurnAuth[](2);
         bAuth[0] = IERC5484.BurnAuth.OwnerOnly;
         bAuth[1] = IERC5484.BurnAuth.OwnerOnly;
-        vm.expectRevert("Ownable: caller is not the owner");
+        vm.expectRevert("MAGISTER_ROLE");
         cb.multiMint(to, uri, bAuth);
     }
 
@@ -140,5 +140,17 @@ contract CredentialsBurnableTest is Test {
         cb.setBaseURI("https://example777.com/");
         vm.stopPrank();
         assertEq(cb.baseURI(), "https://example777.com/");
+    }
+
+    function testSupportInterface() public {
+        assertTrue(cb.supportsInterface(type(IAccessControl).interfaceId));
+    }
+
+    function testAdminCanAssignMagisterRole() public {
+        vm.startPrank(owner);
+        address magister = makeAddr("Cicerone");
+        cb.grantRole(cb.MAGISTER_ROLE(), magister);
+        vm.stopPrank();
+        assertTrue(cb.hasRole(cb.MAGISTER_ROLE(), magister));
     }
 }
