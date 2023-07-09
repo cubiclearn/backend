@@ -8,8 +8,15 @@ contract CredentialsBurnable is SoulboundNFTBurnable, AccessControl {
     uint256 public immutable MAX_SUPPLY;
     bytes32 public constant MAGISTER_ROLE = keccak256("MAGISTER_ROLE");
 
+    string public contractURI;
+
     modifier onlyMagister() {
         require(hasRole(MAGISTER_ROLE, msg.sender), "MAGISTER_ROLE");
+        _;
+    }
+
+    modifier onlyAdmin() {
+        require(hasRole(DEFAULT_ADMIN_ROLE, msg.sender), "DEFAULT_ADMIN_ROLE");
         _;
     }
 
@@ -48,8 +55,12 @@ contract CredentialsBurnable is SoulboundNFTBurnable, AccessControl {
         }
     }
 
-    function setBaseURI(string memory _bUri) external onlyMagister {
+    function setBaseURI(string memory _bUri) external onlyAdmin {
         _setBaseURI(_bUri);
+    }
+
+    function setContractURI(string memory _contractURI) external onlyAdmin {
+        contractURI = _contractURI;
     }
 
     function supportsInterface(bytes4 interfaceId)

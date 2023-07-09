@@ -162,4 +162,18 @@ contract CredentialsBurnableTest is Test {
         cb.mint(discipulus, "1", IERC5484.BurnAuth.OwnerOnly);
         vm.stopPrank();
     }
+
+    function testAdminCanSetContractURI() public {
+        vm.startPrank(owner);
+        cb.setContractURI("https://example777.com/");
+        vm.stopPrank();
+        assertEq(cb.contractURI(), "https://example777.com/");
+    }
+
+    function testNonAdminCannotSetContractURI() public {
+        vm.startPrank(makeAddr("Sciura"));
+        vm.expectRevert("DEFAULT_ADMIN_ROLE");
+        cb.setContractURI("https://example777.com/");
+        vm.stopPrank();
+    }
 }
