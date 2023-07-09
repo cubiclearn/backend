@@ -1,6 +1,16 @@
 repos:
-    - repo: https://github.com/0xYYY/foundry-pre-commit
-      rev: v1.0.0
-      hooks:
-          - id: format
-          - id: snapshot
+  - repo: local
+    hooks:
+      - id: format
+        name: format code
+        description: format solidity code with `forge fmt`
+        language: system
+        entry: forge fmt
+        pass_filenames: false
+        stages: [commit]
+      - id: snapshot
+        name: take gas snapshot
+        description: generate gas snapshot report with `forge snapshot`
+        language: system
+        entry: forge snapshot
+        pass_filenames: false
