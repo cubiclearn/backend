@@ -2,7 +2,7 @@
 pragma solidity ^0.8.9;
 
 import "src/Karma/IERC4974.sol";
-import "@openzeppelin/contracts/utils/introspection/IERC165.sol";
+import "openzeppelin-contracts/contracts/utils/introspection/IERC165.sol";
 
 contract Karma is IERC4974, IERC165 {
     address public operator;
