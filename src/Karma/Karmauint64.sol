@@ -11,7 +11,7 @@ contract Karmauint64 is IERC4974uint64, IERC165 {
     mapping(address => uint64) public karma;
 
     modifier onlyOperator() {
-        require(msg.sender == operator, "Karma: caller is not the operator");
+        require(this.isOperator(msg.sender), "NOT_OPERATOR");
         _;
     }
 
@@ -19,9 +19,13 @@ contract Karmauint64 is IERC4974uint64, IERC165 {
         operator = _operator;
     }
 
+    function isOperator(address _operator) external view virtual returns (bool) {
+        return _operator == operator;
+    }
+
     function setOperator(address _operator) external override onlyOperator {
-        require(_operator != address(0), "Karma: operator is the zero address");
-        require(_operator != operator, "Karma: operator is already set");
+        require(_operator != address(0), "ADDRESS_ZERO");
+        require(!this.isOperator(_operator), "OPERATOR");
         operator = _operator;
         emit NewOperator(_operator);
     }

@@ -12,9 +12,9 @@ contract CredentialsFactory {
         external
         returns (address, address)
     {
-        Credentials creds;
-        creds = Credentials(address(new CredentialsBurnable(msg.sender, _name, _symbol, _bUri, maxSupply)));
-        address karmaAccessControl = address(new KarmaAccessControluint64(Credentials(creds), msg.sender));
+        CredentialsBurnable creds;
+        creds = CredentialsBurnable(address(new CredentialsBurnable(msg.sender, _name, _symbol, _bUri, maxSupply)));
+        address karmaAccessControl = address(new KarmaAccessControluint64(CredentialsBurnable(creds), msg.sender));
         emit KarmaAccessControlCreated(msg.sender, address(karmaAccessControl));
         return (address(creds), karmaAccessControl);
     }

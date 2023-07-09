@@ -26,12 +26,12 @@ contract KarmaTest is Test {
     }
 
     function testSetOperatorWithZeroAddress() public {
-        vm.expectRevert("Karma: operator is the zero address");
+        vm.expectRevert("ADDRESS_ZERO");
         karma.setOperator(address(0));
     }
 
     function testSetOperatorWithCurrentOperator() public {
-        vm.expectRevert("Karma: operator is already set");
+        vm.expectRevert("OPERATOR");
         karma.setOperator(address(this));
     }
 

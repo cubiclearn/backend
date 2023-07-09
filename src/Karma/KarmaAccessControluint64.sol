@@ -3,7 +3,7 @@ pragma solidity ^0.8.9;
 
 import "src/Karma/Karmauint64.sol";
 
-import "src/Credentials/SBT.sol";
+import "src/Credentials/CredentialsBurnable.sol";
 
 /// @title Karmauint64 with access restricted to user with credentials
 /// @author donnoh.eth
@@ -11,9 +11,13 @@ import "src/Credentials/SBT.sol";
 /// from the Credentials operator.
 
 contract KarmaAccessControluint64 is Karmauint64 {
-    SoulboundNFT public credentials;
+    CredentialsBurnable public credentials;
 
-    constructor(SoulboundNFT _credentials, address _operator) Karmauint64(_operator) {
+    function isOperator(address _operator) external view override returns (bool) {
+        return credentials.hasRole(credentials.MAGISTER_ROLE(), _operator);
+    }
+
+    constructor(CredentialsBurnable _credentials, address _operator) Karmauint64(_operator) {
         credentials = _credentials;
     }
 
@@ -21,8 +25,8 @@ contract KarmaAccessControluint64 is Karmauint64 {
         return credentials.balanceOf(_user) > 0;
     }
 
-    function rate(address _user, uint64 _rating) external override {
-        require(hasAccess(_user), "KarmaAccessControluint64: user does not have access");
+    function rate(address _user, uint64 _rating) external override onlyOperator {
+        require(hasAccess(_user), "NO_CREDENTIALS");
         super._rate(_user, _rating);
     }
 }
