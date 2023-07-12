@@ -6,7 +6,7 @@ import "src/Credentials/Credentials.sol";
 import "src/Karma/KarmaAccessControluint64.sol";
 import "src/Credentials/Factory.sol";
 
-contract LocalDeploy is Script {
+contract FactoryDeploy is Script {
     function run() external {
         uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
         vm.startBroadcast(deployerPrivateKey);
