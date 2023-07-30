@@ -154,15 +154,6 @@ contract CredentialsBurnableTest is Test {
         assertTrue(cb.hasRole(cb.MAGISTER_ROLE(), magister));
     }
 
-    function testCantMintTwiceToSameAddress() public {
-        vm.startPrank(owner);
-        address discipulus = makeAddr("Discipulus");
-        cb.mint(discipulus, "1", IERC5484.BurnAuth.OwnerOnly);
-        vm.expectRevert("ALREADY_MINTED");
-        cb.mint(discipulus, "1", IERC5484.BurnAuth.OwnerOnly);
-        vm.stopPrank();
-    }
-
     function testAdminCanSetContractURI() public {
         vm.startPrank(owner);
         cb.setContractURI("https://example777.com/");
