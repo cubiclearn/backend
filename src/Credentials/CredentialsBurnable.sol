@@ -39,6 +39,18 @@ contract CredentialsBurnable is SoulboundNFTBurnable, AccessControl {
         emit Issued(msg.sender, to, ts, bAuth);
     }
 
+    function mintMagister(address to, string memory uri, BurnAuth bAuth) external onlyAdmin {
+        uint256 ts = totalSupply();
+        require(ts + 1 <= MAX_SUPPLY, "MAX_SUPPLY");
+        _safeMint(to, ts);
+        _setTokenURI(ts, uri);
+        _setBurnAuth(ts, bAuth);
+        _setIssuer(ts, msg.sender);
+        _grantRole(MAGISTER_ROLE, to);
+        emit Locked(ts);
+        emit Issued(msg.sender, to, ts, bAuth);
+    }
+
     function multiMint(address[] memory to, string[] memory uri, BurnAuth[] memory bAuth) external onlyMagister {
         uint256 ts = totalSupply();
         require(ts + to.length <= MAX_SUPPLY, "MAX_SUPPLY");

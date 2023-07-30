@@ -167,4 +167,13 @@ contract CredentialsBurnableTest is Test {
         cb.setContractURI("https://example777.com/");
         vm.stopPrank();
     }
+
+    function testMintMagister() public {
+        vm.startPrank(owner);
+        address magister = makeAddr("Cicerone");
+        cb.mintMagister(magister, "1", IERC5484.BurnAuth.OwnerOnly);
+        vm.stopPrank();
+        assertEq(cb.balanceOf(magister), 1);
+        assertEq(cb.hasRole(cb.MAGISTER_ROLE(), magister), true);
+    }
 }
