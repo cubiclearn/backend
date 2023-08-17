@@ -36,8 +36,18 @@ contract KarmaAccessControluint64Test is Test {
         address user = makeAddr("user");
         credentialsBurnable.mint(user, "1", IERC5484.BurnAuth.Neither);
         assertEq(karmaCredentialsBurnable.hasAccess(user), true);
-        karmaCredentialsBurnable.rate(user, 1);
+        karmaCredentialsBurnable.rate(user, DISCIPULUS_KARMA + 1);
         assertEq(karmaCredentialsBurnable.ratingOf(user), DISCIPULUS_KARMA + 1);
+        vm.stopPrank();
+    }
+
+    function testRateUserTooLow() public {
+        vm.startPrank(MAGISTER);
+        address user = makeAddr("user");
+        credentialsBurnable.mint(user, "1", IERC5484.BurnAuth.Neither);
+        assertEq(karmaCredentialsBurnable.hasAccess(user), true);
+        vm.expectRevert("RATING_TOO_LOW");
+        karmaCredentialsBurnable.rate(user, DISCIPULUS_KARMA - 1);
         vm.stopPrank();
     }
 
@@ -45,7 +55,7 @@ contract KarmaAccessControluint64Test is Test {
         vm.startPrank(MAGISTER);
         credentialsBurnable.mint(MAGISTER, "1", IERC5484.BurnAuth.Neither);
         assertEq(karmaCredentialsBurnable.hasAccess(MAGISTER), true);
-        karmaCredentialsBurnable.rate(MAGISTER, 1);
+        karmaCredentialsBurnable.rate(MAGISTER, MAGISTER_KARMA + 1);
         assertEq(karmaCredentialsBurnable.ratingOf(MAGISTER), MAGISTER_KARMA + 1);
         vm.stopPrank();
     }
@@ -67,7 +77,7 @@ contract KarmaAccessControluint64Test is Test {
             users[i] = vm.addr(i + 1);
             credentialsBurnable.mint(users[i], "1", IERC5484.BurnAuth.Neither);
             assertEq(karmaCredentialsBurnable.hasAccess(users[i]), true);
-            ratings[i] = i;
+            ratings[i] = DISCIPULUS_KARMA + i;
         }
         karmaCredentialsBurnable.multiRate(users, ratings);
         for (uint64 i = 0; i < 10; i++) {
@@ -94,6 +104,34 @@ contract KarmaAccessControluint64Test is Test {
         uint64[] memory ratings = new uint64[](9);
         vm.expectRevert("LENGTH_MISMATCH");
         karmaCredentialsBurnable.multiRate(users, ratings);
+        vm.stopPrank();
+    }
+
+    function testRatingOfWithoutAccess() public {
+        vm.startPrank(MAGISTER);
+        address user = makeAddr("user");
+        assertEq(karmaCredentialsBurnable.hasAccess(user), false);
+        vm.expectRevert("NO_CREDENTIALS");
+        karmaCredentialsBurnable.ratingOf(user);
+        vm.stopPrank();
+    }
+
+    function testBaseKarma() public {
+        vm.startPrank(MAGISTER);
+        address user = makeAddr("user");
+        credentialsBurnable.mint(user, "1", IERC5484.BurnAuth.Neither);
+        assertEq(karmaCredentialsBurnable.getBaseKarma(user), DISCIPULUS_KARMA);
+        credentialsBurnable.mint(MAGISTER, "1", IERC5484.BurnAuth.Neither);
+        assertEq(karmaCredentialsBurnable.getBaseKarma(MAGISTER), MAGISTER_KARMA);
+        vm.stopPrank();
+    }
+
+    function testBaseKarmaWithoutAccess() public {
+        vm.startPrank(MAGISTER);
+        address user = makeAddr("user");
+        assertEq(karmaCredentialsBurnable.hasAccess(user), false);
+        vm.expectRevert("NO_CREDENTIALS");
+        karmaCredentialsBurnable.getBaseKarma(user);
         vm.stopPrank();
     }
 }

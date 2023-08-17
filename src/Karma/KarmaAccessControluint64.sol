@@ -27,27 +27,34 @@ contract KarmaAccessControluint64 is Karmauint64 {
         BASE_DISCIPULUS_KARMA = _baseDiscipulusKarma;
     }
 
-    function ratingOf(address _user) public view override returns (uint64) {
+    function getBaseKarma(address _user) public view returns (uint64) {
+        require(hasAccess(_user), "NO_CREDENTIALS");
         if (credentials.hasRole(credentials.MAGISTER_ROLE(), _user)) {
-            return BASE_MAGISTER_KARMA + super.ratingOf(_user);
+            return BASE_MAGISTER_KARMA;
         }
-        return BASE_DISCIPULUS_KARMA + super.ratingOf(_user);
+        return BASE_DISCIPULUS_KARMA;
+    }
+
+    function ratingOf(address _user) public view override returns (uint64) {
+        require(hasAccess(_user), "NO_CREDENTIALS");
+        return getBaseKarma(_user) + super.ratingOf(_user);
     }
 
     function hasAccess(address _user) public view returns (bool) {
         return credentials.balanceOf(_user) > 0;
     }
 
-    function rate(address _user, uint64 _rating) external override onlyOperator {
+    function rate(address _user, uint64 _rating) public override onlyOperator {
         require(hasAccess(_user), "NO_CREDENTIALS");
-        super._rate(_user, _rating);
+        uint64 baseKarma = getBaseKarma(_user);
+        require(_rating >= baseKarma, "RATING_TOO_LOW");
+        super._rate(_user, _rating - baseKarma);
     }
 
     function multiRate(address[] calldata _users, uint64[] calldata _ratings) external onlyOperator {
         require(_users.length == _ratings.length, "LENGTH_MISMATCH");
         for (uint256 i = 0; i < _users.length; i++) {
-            require(hasAccess(_users[i]), "NO_CREDENTIALS");
-            super._rate(_users[i], _ratings[i]);
+            rate(_users[i], _ratings[i]);
         }
     }
 }
