@@ -17,7 +17,7 @@ contract KarmaAccessControluint64Test is Test {
 
     function setUp() public {
         vm.startPrank(MAGISTER);
-        credentialsBurnable = new CredentialsBurnable(MAGISTER, "TEST", "TST", "https://test.com/", 100);
+        credentialsBurnable = new CredentialsBurnable(MAGISTER, "TEST", "TST", "https://test.com/");
         karmaCredentialsBurnable = new KarmaAccessControluint64(credentialsBurnable, MAGISTER_KARMA, DISCIPULUS_KARMA);
         vm.stopPrank();
     }
