@@ -176,4 +176,62 @@ contract CredentialsBurnableTest is Test {
         assertEq(cb.balanceOf(magister), 1);
         assertEq(cb.hasRole(cb.MAGISTER_ROLE(), magister), true);
     }
+
+    function testMintMagisterBurnAndRemint() public {
+        vm.startPrank(owner);
+        address magister = makeAddr("Cicerone");
+        cb.mintMagister(magister, "1", IERC5484.BurnAuth.IssuerOnly);
+        vm.stopPrank();
+        assertEq(cb.balanceOf(magister), 1);
+        assertEq(cb.ownerOf(0), magister);
+        assertEq(cb.hasRole(cb.MAGISTER_ROLE(), magister), true);
+        vm.startPrank(owner);
+        cb.burn(0);
+        cb.revokeRole(cb.MAGISTER_ROLE(), magister);
+        assertEq(cb.balanceOf(magister), 0);
+        assertEq(cb.hasRole(cb.MAGISTER_ROLE(), magister), false);
+        vm.startPrank(owner);
+        cb.mintMagister(magister, "1", IERC5484.BurnAuth.IssuerOnly);
+        vm.stopPrank();
+        assertEq(cb.balanceOf(magister), 1);
+        assertEq(cb.ownerOf(1), magister);
+        assertEq(cb.hasRole(cb.MAGISTER_ROLE(), magister), true);
+    }
+
+    function testMintDiscipulusBurnAndRemint() public {
+        vm.startPrank(owner);
+        address discipulus = makeAddr("Discipulus");
+        cb.mint(discipulus, "1", IERC5484.BurnAuth.IssuerOnly);
+        vm.stopPrank();
+        assertEq(cb.balanceOf(discipulus), 1);
+        assertEq(cb.ownerOf(0), discipulus);
+        vm.startPrank(owner);
+        cb.burn(0);
+        assertEq(cb.balanceOf(discipulus), 0);
+        vm.startPrank(owner);
+        cb.mint(discipulus, "1", IERC5484.BurnAuth.IssuerOnly);
+        vm.stopPrank();
+        assertEq(cb.balanceOf(discipulus), 1);
+        assertEq(cb.ownerOf(1), discipulus);
+    }
+
+    function testMintDiscipulusTwoTokenBurnFirstAndRemint() public {
+        vm.startPrank(owner);
+        address discipulus = makeAddr("Discipulus");
+        cb.mint(discipulus, "1", IERC5484.BurnAuth.IssuerOnly);
+        cb.mint(discipulus, "2", IERC5484.BurnAuth.IssuerOnly);
+        vm.stopPrank();
+        assertEq(cb.balanceOf(discipulus), 2);
+        assertEq(cb.ownerOf(0), discipulus);
+        assertEq(cb.ownerOf(1), discipulus);
+        vm.startPrank(owner);
+        cb.burn(0);
+        assertEq(cb.balanceOf(discipulus), 1);
+        vm.startPrank(owner);
+        cb.mint(discipulus, "1", IERC5484.BurnAuth.IssuerOnly);
+        vm.stopPrank();
+        assertEq(cb.balanceOf(discipulus), 2);
+        assertEq(cb.ownerOf(1), discipulus);
+        assertEq(cb.ownerOf(2), discipulus);
+    }
 }

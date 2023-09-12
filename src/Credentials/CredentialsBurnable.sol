@@ -7,6 +7,7 @@ import "openzeppelin-contracts/contracts/access/AccessControl.sol";
 contract CredentialsBurnable is SoulboundNFTBurnable, AccessControl {
     uint256 public immutable MAX_SUPPLY;
     bytes32 public constant MAGISTER_ROLE = keccak256("MAGISTER_ROLE");
+    uint256 public nextIndex;
 
     string public contractURI;
 
@@ -29,8 +30,8 @@ contract CredentialsBurnable is SoulboundNFTBurnable, AccessControl {
     }
 
     function mint(address to, string memory uri, BurnAuth bAuth) external onlyMagister {
-        uint256 ts = totalSupply();
-        require(ts + 1 <= MAX_SUPPLY, "MAX_SUPPLY");
+        uint256 ts = nextIndex++;
+        require(totalSupply() + 1 <= MAX_SUPPLY, "MAX_SUPPLY");
         _safeMint(to, ts);
         _setTokenURI(ts, uri);
         _setBurnAuth(ts, bAuth);
@@ -40,8 +41,8 @@ contract CredentialsBurnable is SoulboundNFTBurnable, AccessControl {
     }
 
     function mintMagister(address to, string memory uri, BurnAuth bAuth) external onlyAdmin {
-        uint256 ts = totalSupply();
-        require(ts + 1 <= MAX_SUPPLY, "MAX_SUPPLY");
+        uint256 ts = nextIndex++;
+        require(totalSupply() + 1 <= MAX_SUPPLY, "MAX_SUPPLY");
         _safeMint(to, ts);
         _setTokenURI(ts, uri);
         _setBurnAuth(ts, bAuth);
@@ -52,8 +53,9 @@ contract CredentialsBurnable is SoulboundNFTBurnable, AccessControl {
     }
 
     function multiMint(address[] memory to, string[] memory uri, BurnAuth[] memory bAuth) external onlyMagister {
-        uint256 ts = totalSupply();
-        require(ts + to.length <= MAX_SUPPLY, "MAX_SUPPLY");
+        uint256 ts = nextIndex;
+        nextIndex += to.length;
+        require(totalSupply() + to.length <= MAX_SUPPLY, "MAX_SUPPLY");
         require(to.length == uri.length && to.length == bAuth.length, "LENGTH_MISMATCH");
         for (uint256 i = 0; i < to.length; i++) {
             require(balanceOf(to[i]) == 0, "ALREADY_MINTED");
