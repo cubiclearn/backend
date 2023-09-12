@@ -53,7 +53,6 @@ contract CredentialsBurnable is SoulboundNFTBurnable, AccessControl {
         nextIndex += to.length;
         require(to.length == uri.length && to.length == bAuth.length, "LENGTH_MISMATCH");
         for (uint256 i = 0; i < to.length; i++) {
-            require(balanceOf(to[i]) == 0, "ALREADY_MINTED");
             _safeMint(to[i], ts + i);
             _setTokenURI(ts + i, uri[i]);
             _setBurnAuth(ts + i, bAuth[i]);
