@@ -134,4 +134,11 @@ contract KarmaAccessControluint64Test is Test {
         karmaCredentialsBurnable.getBaseKarma(user);
         vm.stopPrank();
     }
+
+    function testQuadraticKarma() public {
+        vm.startPrank(MAGISTER);
+        address user = makeAddr("user");
+        credentialsBurnable.mint(user, "1", IERC5484.BurnAuth.Neither);
+        assertEq(karmaCredentialsBurnable.quadraticRatingOf(user), uint64(Math.sqrt(DISCIPULUS_KARMA)));
+    }
 }
