@@ -48,9 +48,36 @@ contract Karmauint64 is IERC4974uint64, IERC165 {
         return karma[_user];
     }
 
+    function _roundedSqrt(uint64 _a) internal pure returns (uint64) {
+        if (_a == 0) return 0; // handle zero input
+        uint64 low = 1;
+        uint64 high = _a;
+        uint64 sqrtFloor;
+
+        while (low <= high) {
+            uint64 mid = (low + high) / 2;
+            uint64 midSquared = mid * mid;
+            if (midSquared == _a) {
+                return mid; // exact square root found
+            } else if (midSquared < _a) {
+                low = mid + 1;
+            } else {
+                high = mid - 1;
+            }
+        }
+
+        sqrtFloor = high; // high will have the floor value of the square root
+        uint64 avgSquared = (sqrtFloor * sqrtFloor + (sqrtFloor + 1) * (sqrtFloor + 1)) / 2;
+
+        if (_a >= avgSquared) {
+            return sqrtFloor + 1;
+        }
+        return sqrtFloor;
+    }
+
     function quadraticRatingOf(address _user) external view returns (uint64) {
         uint64 _karma = this.ratingOf(_user);
-        return uint64(Math.sqrt(_karma));
+        return _roundedSqrt(_karma);
     }
 
     function supportsInterface(bytes4 interfaceID) external pure override returns (bool) {

@@ -53,13 +53,49 @@ contract Karmauint64Test is Test {
         assertEq(karma.ratingOf(user), rating);
     }
 
-    function testQuadraticRate() public {
+    function testQuadraticRate16() public {
         address user = makeAddr("user");
         uint64 rating = 16;
         vm.expectEmit(true, false, false, false);
         emit Rating(user, rating);
         karma.rate(user, rating);
         assertEq(karma.quadraticRatingOf(user), 4);
+    }
+
+    function testQuadraticRate15() public {
+        address user = makeAddr("user");
+        uint64 rating = 15;
+        vm.expectEmit(true, false, false, false);
+        emit Rating(user, rating);
+        karma.rate(user, rating);
+        assertEq(karma.quadraticRatingOf(user), 4);
+    }
+
+    function testQuadraticRate81() public {
+        address user = makeAddr("user");
+        uint64 rating = 81;
+        vm.expectEmit(true, false, false, false);
+        emit Rating(user, rating);
+        karma.rate(user, rating);
+        assertEq(karma.quadraticRatingOf(user), 9);
+    }
+
+    function testQuadraticRate80() public {
+        address user = makeAddr("user");
+        uint64 rating = 80;
+        vm.expectEmit(true, false, false, false);
+        emit Rating(user, rating);
+        karma.rate(user, rating);
+        assertEq(karma.quadraticRatingOf(user), 9);
+    }
+
+    function testQuadraticRate82() public {
+        address user = makeAddr("user");
+        uint64 rating = 82;
+        vm.expectEmit(true, false, false, false);
+        emit Rating(user, rating);
+        karma.rate(user, rating);
+        assertEq(karma.quadraticRatingOf(user), 9);
     }
 
     event Removal(address _rated);
