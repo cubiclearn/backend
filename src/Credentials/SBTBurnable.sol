@@ -25,7 +25,7 @@ contract SoulboundNFTBurnable is SoulboundNFT, IERC5484 {
         return _issuer[tokenId];
     }
 
-    function burn(uint256 tokenId) external {
+    function burn(uint256 tokenId) public {
         require(_exists(tokenId), "INEXISTENT");
         address tokenOwner = ownerOf(tokenId);
         require(

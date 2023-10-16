@@ -53,6 +53,14 @@ contract CredentialsBurnable is SoulboundNFTBurnable, AccessControl {
         emit Issued(msg.sender, to, ts, bAuth);
     }
 
+    // burn magister and remove role
+    function burnMagister(uint256 tokenId) external {
+        require(hasRole(MAGISTER_ROLE, msg.sender), "MAGISTER_ROLE");
+        address owner = ownerOf(tokenId);
+        burn(tokenId);
+        _revokeRole(MAGISTER_ROLE, owner);
+    }
+
     function multiMint(address[] memory to, string[] memory uri, BurnAuth[] memory bAuth) external onlyMagister {
         uint256 ts = nextIndex;
         nextIndex += to.length;

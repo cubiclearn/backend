@@ -203,4 +203,18 @@ contract CredentialsBurnableTest is Test {
         assertEq(cb.ownerOf(1), discipulus);
         assertEq(cb.ownerOf(2), discipulus);
     }
+
+    function testBurnMagister() public {
+        vm.startPrank(owner);
+        address magister = makeAddr("Cicerone");
+        cb.mintMagister(magister, "1", IERC5484.BurnAuth.IssuerOnly);
+        vm.stopPrank();
+        assertEq(cb.balanceOf(magister), 1);
+        assertEq(cb.hasRole(cb.MAGISTER_ROLE(), magister), true);
+        vm.startPrank(owner);
+        cb.burnMagister(0);
+        vm.stopPrank();
+        assertEq(cb.balanceOf(magister), 0);
+        assertEq(cb.hasRole(cb.MAGISTER_ROLE(), magister), false);
+    }
 }
