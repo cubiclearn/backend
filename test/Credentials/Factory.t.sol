@@ -13,7 +13,7 @@ contract FactoryTest is Test {
 
     function testCreateCourse() public {
         (address credentials, address karmaAccessControl) =
-            factory.createCourse("Test", "TST", "https://test.com/", 0, 0);
+            factory.createCourse("Test", "TST", "https://test.com/", "https://test.com/", 0, 0);
         CredentialsBurnable c = CredentialsBurnable(credentials);
         KarmaAccessControluint64 k = KarmaAccessControluint64(karmaAccessControl);
         assertTrue(c.hasRole(c.MAGISTER_ROLE(), address(this)));

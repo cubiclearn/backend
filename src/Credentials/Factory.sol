@@ -12,11 +12,12 @@ contract CredentialsFactory {
         string memory _name,
         string memory _symbol,
         string memory _bUri,
+        string memory _contractURI,
         uint64 _baseMagisterKarma,
         uint64 _baseDiscipulusKarma
     ) external returns (address, address) {
         CredentialsBurnable creds;
-        creds = CredentialsBurnable(address(new CredentialsBurnable(msg.sender, _name, _symbol, _bUri)));
+        creds = CredentialsBurnable(address(new CredentialsBurnable(msg.sender, _name, _symbol, _bUri, _contractURI)));
         address karmaAccessControl =
             address(new KarmaAccessControluint64(CredentialsBurnable(creds), _baseMagisterKarma, _baseDiscipulusKarma));
         emit KarmaAccessControlCreated(msg.sender, address(karmaAccessControl));

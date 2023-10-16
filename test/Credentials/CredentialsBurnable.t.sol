@@ -13,7 +13,7 @@ contract CredentialsBurnableTest is Test {
 
     function setUp() public {
         vm.startPrank(owner);
-        cb = new CredentialsBurnable(owner, "Credentials", "CRED", "https://cred.com/");
+        cb = new CredentialsBurnable(owner, "Credentials", "CRED", "https://cred.com/", "https://cred.com/");
         vm.stopPrank();
     }
 

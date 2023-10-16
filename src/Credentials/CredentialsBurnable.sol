@@ -20,11 +20,16 @@ contract CredentialsBurnable is SoulboundNFTBurnable, AccessControl {
         _;
     }
 
-    constructor(address _admin, string memory _name, string memory _symbol, string memory _bUri)
-        SoulboundNFTBurnable(_name, _symbol, _bUri)
-    {
+    constructor(
+        address _admin,
+        string memory _name,
+        string memory _symbol,
+        string memory _bUri,
+        string memory _contractURI
+    ) SoulboundNFTBurnable(_name, _symbol, _bUri) {
         _grantRole(MAGISTER_ROLE, _admin);
         _grantRole(DEFAULT_ADMIN_ROLE, _admin);
+        contractURI = _contractURI;
     }
 
     function mint(address to, string memory uri, BurnAuth bAuth) external onlyMagister {

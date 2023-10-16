@@ -17,7 +17,8 @@ contract KarmaAccessControlTest is Test {
         credentials = new Credentials("TEST", "TST", "https://test.com/", 100);
         karmaCredentials = new KarmaAccessControl(credentials, address(this));
 
-        credentialsBurnable = new CredentialsBurnable(address(this), "TEST", "TST", "https://test.com/");
+        credentialsBurnable =
+            new CredentialsBurnable(address(this), "TEST", "TST", "https://test.com/", "https://test.com/");
         karmaCredentialsBurnable = new KarmaAccessControl(credentialsBurnable, address(this));
     }
 
