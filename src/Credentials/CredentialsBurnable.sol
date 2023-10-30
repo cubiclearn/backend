@@ -8,7 +8,7 @@ contract CredentialsBurnable is SoulboundNFTBurnable, AccessControl {
     bytes32 public constant MAGISTER_ROLE = keccak256("MAGISTER_ROLE");
     uint256 public nextIndex;
 
-    string public contractURI;
+    string private contractURI;
 
     modifier onlyMagister() {
         require(hasRole(MAGISTER_ROLE, msg.sender), "MAGISTER_ROLE");
@@ -80,6 +80,21 @@ contract CredentialsBurnable is SoulboundNFTBurnable, AccessControl {
 
     function setContractURI(string memory _contractURI) external onlyAdmin {
         contractURI = _contractURI;
+    }
+
+    function getContractURI() external view returns (string memory) {
+        string memory _contractURI = contractURI;
+        string memory base = _baseURI();
+
+        if (bytes(base).length == 0) {
+            return _contractURI;
+        }
+
+        if (bytes(_contractURI).length > 0) {
+            return string(abi.encodePacked(base, _contractURI));
+        }
+
+        return _contractURI;
     }
 
     function supportsInterface(bytes4 interfaceId)

@@ -13,7 +13,7 @@ contract CredentialsBurnableTest is Test {
 
     function setUp() public {
         vm.startPrank(owner);
-        cb = new CredentialsBurnable(owner, "Credentials", "CRED", "https://cred.com/", "https://cred.com/");
+        cb = new CredentialsBurnable(owner, "Credentials", "CRED", "https://cred.com/", "contractURI");
         vm.stopPrank();
     }
 
@@ -125,15 +125,15 @@ contract CredentialsBurnableTest is Test {
 
     function testAdminCanSetContractURI() public {
         vm.startPrank(owner);
-        cb.setContractURI("https://example777.com/");
+        cb.setContractURI("aaa");
         vm.stopPrank();
-        assertEq(cb.contractURI(), "https://example777.com/");
+        assertEq(cb.getContractURI(), "https://cred.com/aaa");
     }
 
     function testNonAdminCannotSetContractURI() public {
         vm.startPrank(makeAddr("Sciura"));
         vm.expectRevert("DEFAULT_ADMIN_ROLE");
-        cb.setContractURI("https://example777.com/");
+        cb.setContractURI("bbb");
         vm.stopPrank();
     }
 
@@ -216,5 +216,9 @@ contract CredentialsBurnableTest is Test {
         vm.stopPrank();
         assertEq(cb.balanceOf(magister), 0);
         assertEq(cb.hasRole(cb.MAGISTER_ROLE(), magister), false);
+    }
+
+    function testContractURI() public {
+        assertEq(cb.getContractURI(), "https://cred.com/contractURI");
     }
 }
